@@ -18,13 +18,11 @@ padding:30px;
 
 
 .container{
-
 max-width:900px;
 margin:auto;
 background:white;
 padding:25px;
 border-radius:15px;
-
 }
 
 
@@ -50,18 +48,8 @@ border-radius:6px;
 
 
 button:hover{
-
-opacity:.85;
-
+opacity:.8;
 }
-
-
-.locked{
-
-background:#eeeeee;
-
-}
-
 
 
 #counter{
@@ -72,9 +60,6 @@ border-radius:8px;
 
 }
 
-
-
-/* TABLE */
 
 table{
 
@@ -104,14 +89,7 @@ text-align:center;
 
 tr:nth-child(even){
 
-background:#f8f8f8;
-
-}
-
-
-tr:hover{
-
-background:#eeeeee;
+background:#f7f7f7;
 
 }
 
@@ -124,14 +102,11 @@ background:#1976d2;
 }
 
 
-
 .delete{
 
 background:#d32f2f;
 
 }
-
-
 
 
 #msg{
@@ -140,14 +115,12 @@ display:none;
 background:#d4edda;
 color:#155724;
 padding:10px;
-border-radius:5px;
 
 }
 
 
 
 /* POPUP */
-
 
 .popup,
 .error-popup{
@@ -165,7 +138,6 @@ align-items:center;
 }
 
 
-
 .popup-box,
 .error-box{
 
@@ -178,7 +150,6 @@ text-align:center;
 }
 
 
-
 .error-box{
 
 color:red;
@@ -186,9 +157,7 @@ color:red;
 }
 
 
-
 </style>
-
 
 </head>
 
@@ -196,14 +165,13 @@ color:red;
 <body>
 
 
-
 <div class="container">
-
 
 
 <h2>
 Custom Shipping Rates Manager
 </h2>
+
 
 
 <h3 id="counter">
@@ -212,49 +180,52 @@ Total Rules: 0
 
 
 
+
 <input id="location"
-placeholder="Customer Location"
-oninput="lockInputs()">
+placeholder="Customer Location">
 
 
 
 <input id="minWeight"
 type="number"
-placeholder="Minimum Weight (kg)"
-oninput="lockInputs()">
+placeholder="Minimum Weight (kg)">
 
 
 
 <input id="maxWeight"
 type="number"
-placeholder="Maximum Weight (kg)"
-oninput="lockInputs()">
+placeholder="Maximum Weight (kg)">
 
 
 
 <input id="distance"
 type="number"
-placeholder="Distance (km)"
-oninput="lockInputs()">
+placeholder="Distance (km)">
 
 
 
 <input id="price"
 type="number"
-placeholder="Shipping Cost"
-oninput="lockInputs()">
+placeholder="Shipping Cost">
 
 
 
 <button onclick="addRule()">
+
 Add Shipping Rule
+
 </button>
 
 
 
+
 <div id="msg">
+
 ✅ Rule Added Successfully
+
 </div>
+
+
 
 
 
@@ -265,6 +236,8 @@ Add Shipping Rule
 <input id="search"
 placeholder="Search Location"
 onkeyup="searchRule()">
+
+
 
 
 
@@ -283,8 +256,8 @@ onkeyup="searchRule()">
 
 </tr>
 
-
 </thead>
+
 
 
 <tbody id="rules">
@@ -303,7 +276,6 @@ onkeyup="searchRule()">
 
 
 
-
 <!-- EDIT POPUP -->
 
 
@@ -313,7 +285,8 @@ onkeyup="searchRule()">
 <div class="popup-box">
 
 
-<h3>Edit Rule</h3>
+<h3>Edit Shipping Rule</h3>
+
 
 
 <input id="editLocation">
@@ -323,12 +296,15 @@ onkeyup="searchRule()">
 type="number">
 
 
+
 <input id="editMaxWeight"
 type="number">
 
 
+
 <input id="editDistance"
 type="number">
+
 
 
 <input id="editPrice"
@@ -337,20 +313,24 @@ type="number">
 
 
 <button onclick="saveEdit()">
+
 Save Changes
+
 </button>
 
 
 <button onclick="closeEdit()">
+
 Cancel
+
 </button>
 
 
 
 </div>
 
-
 </div>
+
 
 
 
@@ -374,9 +354,10 @@ Cancel
 
 
 <button onclick="closeError()">
-OK
-</button>
 
+OK
+
+</button>
 
 
 </div>
@@ -399,64 +380,7 @@ let rules =
 JSON.parse(localStorage.getItem("shippingRules")) || [];
 
 
-let isLocked=false;
-
 let editIndex=-1;
-
-let currentData=rules;
-
-
-
-
-
-
-function lockInputs(){
-
-
-if(isLocked)
-return;
-
-
-
-let inputs=document.querySelectorAll(
-".container input:not(#search)"
-);
-
-
-
-let filled=false;
-
-
-inputs.forEach(input=>{
-
-if(input.value!="")
-filled=true;
-
-});
-
-
-
-if(filled){
-
-
-isLocked=true;
-
-
-inputs.forEach(input=>{
-
-input.readOnly=true;
-
-input.classList.add("locked");
-
-});
-
-
-}
-
-
-}
-
-
 
 
 
@@ -465,39 +389,49 @@ input.classList.add("locked");
 function addRule(){
 
 
-let location=
+
+let location =
 document.getElementById("location").value.trim();
 
 
-let minWeight=
+let minWeight =
 document.getElementById("minWeight").value;
 
 
-let maxWeight=
+let maxWeight =
 document.getElementById("maxWeight").value;
 
 
-let distance=
+let distance =
 document.getElementById("distance").value;
 
 
-let price=
+let price =
 document.getElementById("price").value;
 
 
 
 
+if(
+!location ||
+!minWeight ||
+!maxWeight ||
+!distance ||
+!price
+){
 
-if(!location||
-!minWeight||
-!maxWeight||
-!distance||
-!price){
+showError("Please fill all fields");
+
+return;
+
+}
 
 
-showError(
-"Please fill all fields"
-);
+
+
+if(Number(minWeight)>Number(maxWeight)){
+
+showError("Minimum weight cannot be greater than maximum weight");
 
 return;
 
@@ -507,23 +441,14 @@ return;
 
 
 
-let duplicate =
-rules.some(r=>
+let duplicate = rules.some(r=>
 
-r.location.toLowerCase()
-==
-location.toLowerCase()
-
+r.location.toLowerCase()==location.toLowerCase()
 &&
-
 r.minWeight==minWeight
-
 &&
-
 r.maxWeight==maxWeight
-
 &&
-
 r.distance==distance
 
 );
@@ -532,9 +457,7 @@ r.distance==distance
 
 if(duplicate){
 
-showError(
-"Same Rule Already Exists"
-);
+showError("Same Rule Already Exists");
 
 return;
 
@@ -574,13 +497,13 @@ showMessage();
 
 
 
-function editRule(i){
+function editRule(index){
 
 
+let r=rules[index];
 
-let r=rules[i];
 
-editIndex=i;
+editIndex=index;
 
 
 
@@ -607,8 +530,8 @@ editPopup.style.display="flex";
 
 
 
-function saveEdit(){
 
+function saveEdit(){
 
 
 let location=editLocation.value;
@@ -624,36 +547,29 @@ let price=editPrice.value;
 
 
 
-let duplicate =
-rules.some((r,i)=>
 
-i!=editIndex &&
+let duplicate=rules.some((r,i)=>{
 
-r.location.toLowerCase()
-==
-location.toLowerCase()
 
+return i!=editIndex &&
+
+r.location.toLowerCase()==location.toLowerCase()
 &&
-
 r.minWeight==minWeight
-
 &&
-
 r.maxWeight==maxWeight
-
 &&
+r.distance==distance;
 
-r.distance==distance
 
-);
+});
+
 
 
 
 if(duplicate){
 
-showError(
-"Same Min Weight, Max Weight and Distance Exists"
-);
+showError("Same Min Weight, Max Weight and Distance Exists");
 
 return;
 
@@ -691,16 +607,13 @@ displayRules();
 
 
 
-function deleteRule(i){
+function deleteRule(index){
 
 
-if(confirm(
-"Are you sure delete?"
-)){
+if(confirm("Are you sure delete this rule?")){
 
 
-rules.splice(i,1);
-
+rules.splice(index,1);
 
 saveData();
 
@@ -709,10 +622,7 @@ displayRules();
 
 }
 
-
 }
-
-
 
 
 
@@ -725,8 +635,7 @@ let value=
 search.value.toLowerCase();
 
 
-
-currentData =
+let filtered =
 rules.filter(r=>
 
 r.location.toLowerCase()
@@ -735,11 +644,11 @@ r.location.toLowerCase()
 );
 
 
-
-displayTable(currentData);
+displayTable(filtered);
 
 
 }
+
 
 
 
@@ -749,8 +658,6 @@ displayTable(currentData);
 
 function displayRules(){
 
-currentData=rules;
-
 displayTable(rules);
 
 }
@@ -759,51 +666,43 @@ displayTable(rules);
 
 
 
-
-
 function displayTable(data){
 
 
-
-let out="";
-
+let output="";
 
 
 data.forEach((r,i)=>{
 
 
-out+=`
+output+=`
 
 <tr>
 
 <td>${r.location}</td>
 
-<td>
-${r.minWeight}-${r.maxWeight} kg
-</td>
+<td>${r.minWeight}-${r.maxWeight} kg</td>
 
-<td>
-${r.distance} km
-</td>
+<td>${r.distance} km</td>
 
-<td>
-₹${r.price}
-</td>
+<td>₹${r.price}</td>
 
 
 <td>
-
 
 <button class="edit"
 onclick="editRule(${i})">
-Edit
-</button>
 
+Edit
+
+</button>
 
 
 <button class="delete"
 onclick="deleteRule(${i})">
+
 Delete
+
 </button>
 
 
@@ -819,14 +718,34 @@ Delete
 });
 
 
-
-rules.innerHTML=out;
-
+document.getElementById("rules").innerHTML=output;
 
 
-counter.innerHTML=
+document.getElementById("counter").innerHTML=
 "Total Rules: "+rules.length;
 
+
+}
+
+
+
+
+
+
+
+
+function clearInputs(){
+
+
+location.value="";
+
+minWeight.value="";
+
+maxWeight.value="";
+
+distance.value="";
+
+price.value="";
 
 
 }
@@ -841,42 +760,16 @@ function saveData(){
 
 
 localStorage.setItem(
+
 "shippingRules",
+
 JSON.stringify(rules)
+
 );
 
 
 }
 
-
-
-
-
-
-
-function clearInputs(){
-
-
-document.querySelectorAll(
-".container input:not(#search)"
-)
-.forEach(input=>{
-
-
-input.value="";
-
-input.readOnly=false;
-
-input.classList.remove("locked");
-
-
-});
-
-
-isLocked=false;
-
-
-}
 
 
 
@@ -892,11 +785,14 @@ editPopup.style.display="none";
 
 
 
-function showError(msg){
+function showError(message){
 
-errorText.innerHTML=msg;
+
+errorText.innerHTML=message;
+
 
 errorPopup.style.display="flex";
+
 
 }
 
@@ -904,13 +800,17 @@ errorPopup.style.display="flex";
 
 function closeError(){
 
+
 errorPopup.style.display="none";
+
 
 }
 
 
 
+
 function showMessage(){
+
 
 msg.style.display="block";
 
@@ -934,6 +834,9 @@ displayRules();
 </script>
 
 
+
 </body>
 
 </html>
+
+
