@@ -7,7 +7,6 @@
 
 <title>Custom Shipping Rates Manager</title>
 
-
 <style>
 
 body{
@@ -15,7 +14,6 @@ font-family:Arial;
 background:#f4f4f4;
 padding:30px;
 }
-
 
 .container{
 max-width:900px;
@@ -27,23 +25,19 @@ border-radius:15px;
 
 
 input,button{
-
 width:100%;
 padding:12px;
 margin:8px 0;
 box-sizing:border-box;
-
 }
 
 
 button{
-
 background:#000;
 color:white;
 border:none;
 cursor:pointer;
-border-radius:6px;
-
+border-radius:5px;
 }
 
 
@@ -53,69 +47,48 @@ opacity:.8;
 
 
 #counter{
-
 background:#eee;
 padding:10px;
 border-radius:8px;
-
 }
 
 
 table{
-
 width:100%;
 border-collapse:collapse;
 margin-top:20px;
-
 }
 
 
 th{
-
 background:#222;
 color:white;
-
 }
 
 
 th,td{
-
 border:1px solid #ddd;
 padding:12px;
 text-align:center;
-
 }
-
-
-tr:nth-child(even){
-
-background:#f7f7f7;
-
-}
-
 
 
 .edit{
-
 background:#1976d2;
-
 }
 
 
 .delete{
-
 background:#d32f2f;
-
 }
 
 
-#msg{
 
+#msg{
 display:none;
 background:#d4edda;
 color:#155724;
 padding:10px;
-
 }
 
 
@@ -142,8 +115,8 @@ align-items:center;
 .error-box{
 
 background:white;
-padding:25px;
 width:350px;
+padding:25px;
 border-radius:10px;
 text-align:center;
 
@@ -151,18 +124,19 @@ text-align:center;
 
 
 .error-box{
-
 color:red;
-
 }
 
 
 </style>
 
+
 </head>
 
 
+
 <body>
+
 
 
 <div class="container">
@@ -173,11 +147,9 @@ Custom Shipping Rates Manager
 </h2>
 
 
-
 <h3 id="counter">
 Total Rules: 0
 </h3>
-
 
 
 
@@ -218,13 +190,11 @@ Add Shipping Rule
 
 
 
-
 <div id="msg">
 
 ✅ Rule Added Successfully
 
 </div>
-
 
 
 
@@ -236,8 +206,6 @@ Add Shipping Rule
 <input id="search"
 placeholder="Search Location"
 onkeyup="searchRule()">
-
-
 
 
 
@@ -256,11 +224,12 @@ onkeyup="searchRule()">
 
 </tr>
 
+
 </thead>
 
 
 
-<tbody id="rules">
+<tbody id="ruleTable">
 
 </tbody>
 
@@ -276,8 +245,8 @@ onkeyup="searchRule()">
 
 
 
-<!-- EDIT POPUP -->
 
+<!-- EDIT POPUP -->
 
 <div id="editPopup" class="popup">
 
@@ -285,8 +254,9 @@ onkeyup="searchRule()">
 <div class="popup-box">
 
 
-<h3>Edit Shipping Rule</h3>
-
+<h3>
+Edit Rule
+</h3>
 
 
 <input id="editLocation">
@@ -296,15 +266,12 @@ onkeyup="searchRule()">
 type="number">
 
 
-
 <input id="editMaxWeight"
 type="number">
 
 
-
 <input id="editDistance"
 type="number">
-
 
 
 <input id="editPrice"
@@ -319,6 +286,7 @@ Save Changes
 </button>
 
 
+
 <button onclick="closeEdit()">
 
 Cancel
@@ -329,8 +297,8 @@ Cancel
 
 </div>
 
-</div>
 
+</div>
 
 
 
@@ -340,14 +308,15 @@ Cancel
 
 <!-- ERROR POPUP -->
 
-
 <div id="errorPopup" class="error-popup">
 
 
 <div class="error-box">
 
 
-<h3>Error</h3>
+<h3>
+Error
+</h3>
 
 
 <p id="errorText"></p>
@@ -371,12 +340,10 @@ OK
 
 
 
-
-
 <script>
 
 
-let rules =
+let shippingRules = 
 JSON.parse(localStorage.getItem("shippingRules")) || [];
 
 
@@ -390,7 +357,7 @@ function addRule(){
 
 
 
-let location =
+let locationValue =
 document.getElementById("location").value.trim();
 
 
@@ -413,11 +380,11 @@ document.getElementById("price").value;
 
 
 if(
-!location ||
-!minWeight ||
-!maxWeight ||
-!distance ||
-!price
+locationValue=="" ||
+minWeight=="" ||
+maxWeight=="" ||
+distance=="" ||
+price==""
 ){
 
 showError("Please fill all fields");
@@ -431,7 +398,10 @@ return;
 
 if(Number(minWeight)>Number(maxWeight)){
 
-showError("Minimum weight cannot be greater than maximum weight");
+
+showError(
+"Minimum weight cannot be greater than maximum weight"
+);
 
 return;
 
@@ -441,15 +411,26 @@ return;
 
 
 
-let duplicate = rules.some(r=>
+let duplicate =
+shippingRules.some(rule=>
 
-r.location.toLowerCase()==location.toLowerCase()
+
+rule.location.toLowerCase()
+==
+locationValue.toLowerCase()
+
 &&
-r.minWeight==minWeight
+
+rule.minWeight==minWeight
+
 &&
-r.maxWeight==maxWeight
+
+rule.maxWeight==maxWeight
+
 &&
-r.distance==distance
+
+rule.distance==distance
+
 
 );
 
@@ -457,7 +438,9 @@ r.distance==distance
 
 if(duplicate){
 
-showError("Same Rule Already Exists");
+showError(
+"Same Rule Already Exists"
+);
 
 return;
 
@@ -467,15 +450,16 @@ return;
 
 
 
-rules.push({
+shippingRules.push({
 
-location,
-minWeight,
-maxWeight,
-distance,
-price
+location:locationValue,
+minWeight:minWeight,
+maxWeight:maxWeight,
+distance:distance,
+price:price
 
 });
+
 
 
 
@@ -500,30 +484,28 @@ showMessage();
 function editRule(index){
 
 
-let r=rules[index];
+let r=shippingRules[index];
 
 
 editIndex=index;
 
 
+document.getElementById("editLocation").value=r.location;
 
-editLocation.value=r.location;
+document.getElementById("editMinWeight").value=r.minWeight;
 
-editMinWeight.value=r.minWeight;
+document.getElementById("editMaxWeight").value=r.maxWeight;
 
-editMaxWeight.value=r.maxWeight;
+document.getElementById("editDistance").value=r.distance;
 
-editDistance.value=r.distance;
-
-editPrice.value=r.price;
-
+document.getElementById("editPrice").value=r.price;
 
 
-editPopup.style.display="flex";
+
+document.getElementById("editPopup").style.display="flex";
 
 
 }
-
 
 
 
@@ -534,42 +516,61 @@ editPopup.style.display="flex";
 function saveEdit(){
 
 
-let location=editLocation.value;
-
-let minWeight=editMinWeight.value;
-
-let maxWeight=editMaxWeight.value;
-
-let distance=editDistance.value;
-
-let price=editPrice.value;
+let locationValue=
+document.getElementById("editLocation").value;
 
 
+let minWeight=
+document.getElementById("editMinWeight").value;
+
+
+let maxWeight=
+document.getElementById("editMaxWeight").value;
+
+
+let distance=
+document.getElementById("editDistance").value;
+
+
+let price=
+document.getElementById("editPrice").value;
 
 
 
-let duplicate=rules.some((r,i)=>{
 
 
-return i!=editIndex &&
+let duplicate =
+shippingRules.some((rule,index)=>{
 
-r.location.toLowerCase()==location.toLowerCase()
+
+return index!=editIndex &&
+
+rule.location.toLowerCase()
+==
+locationValue.toLowerCase()
+
 &&
-r.minWeight==minWeight
+
+rule.minWeight==minWeight
+
 &&
-r.maxWeight==maxWeight
+
+rule.maxWeight==maxWeight
+
 &&
-r.distance==distance;
+
+rule.distance==distance;
 
 
 });
 
 
 
-
 if(duplicate){
 
-showError("Same Min Weight, Max Weight and Distance Exists");
+showError(
+"Same Min Weight Max Weight Distance Exists"
+);
 
 return;
 
@@ -579,9 +580,9 @@ return;
 
 
 
-rules[editIndex]={
+shippingRules[editIndex]={
 
-location,
+location:locationValue,
 minWeight,
 maxWeight,
 distance,
@@ -606,14 +607,14 @@ displayRules();
 
 
 
-
 function deleteRule(index){
 
 
-if(confirm("Are you sure delete this rule?")){
+if(confirm("Delete this rule?")){
 
 
-rules.splice(index,1);
+shippingRules.splice(index,1);
+
 
 saveData();
 
@@ -622,7 +623,11 @@ displayRules();
 
 }
 
+
 }
+
+
+
 
 
 
@@ -631,17 +636,19 @@ displayRules();
 function searchRule(){
 
 
-let value=
-search.value.toLowerCase();
+let value =
+document.getElementById("search").value.toLowerCase();
+
 
 
 let filtered =
-rules.filter(r=>
+shippingRules.filter(rule=>
 
-r.location.toLowerCase()
+rule.location.toLowerCase()
 .includes(value)
 
 );
+
 
 
 displayTable(filtered);
@@ -655,12 +662,13 @@ displayTable(filtered);
 
 
 
-
 function displayRules(){
 
-displayTable(rules);
+displayTable(shippingRules);
 
 }
+
+
 
 
 
@@ -672,34 +680,44 @@ function displayTable(data){
 let output="";
 
 
-data.forEach((r,i)=>{
+data.forEach((rule,index)=>{
 
 
 output+=`
 
 <tr>
 
-<td>${r.location}</td>
+<td>${rule.location}</td>
 
-<td>${r.minWeight}-${r.maxWeight} kg</td>
+<td>
+${rule.minWeight}-${rule.maxWeight} kg
+</td>
 
-<td>${r.distance} km</td>
 
-<td>₹${r.price}</td>
+<td>
+${rule.distance} km
+</td>
+
+
+<td>
+₹${rule.price}
+</td>
 
 
 <td>
 
+
 <button class="edit"
-onclick="editRule(${i})">
+onclick="editRule(${index})">
 
 Edit
 
 </button>
 
 
+
 <button class="delete"
-onclick="deleteRule(${i})">
+onclick="deleteRule(${index})">
 
 Delete
 
@@ -714,19 +732,18 @@ Delete
 `;
 
 
-
 });
 
 
-document.getElementById("rules").innerHTML=output;
+
+document.getElementById("ruleTable").innerHTML=output;
 
 
 document.getElementById("counter").innerHTML=
-"Total Rules: "+rules.length;
+"Total Rules: "+shippingRules.length;
 
 
 }
-
 
 
 
@@ -737,19 +754,18 @@ document.getElementById("counter").innerHTML=
 function clearInputs(){
 
 
-location.value="";
+document.getElementById("location").value="";
 
-minWeight.value="";
+document.getElementById("minWeight").value="";
 
-maxWeight.value="";
+document.getElementById("maxWeight").value="";
 
-distance.value="";
+document.getElementById("distance").value="";
 
-price.value="";
+document.getElementById("price").value="";
 
 
 }
-
 
 
 
@@ -758,18 +774,15 @@ price.value="";
 
 function saveData(){
 
-
 localStorage.setItem(
 
 "shippingRules",
 
-JSON.stringify(rules)
+JSON.stringify(shippingRules)
 
 );
 
-
 }
-
 
 
 
@@ -778,7 +791,7 @@ JSON.stringify(rules)
 
 function closeEdit(){
 
-editPopup.style.display="none";
+document.getElementById("editPopup").style.display="none";
 
 }
 
@@ -787,22 +800,18 @@ editPopup.style.display="none";
 
 function showError(message){
 
+document.getElementById("errorText").innerHTML=message;
 
-errorText.innerHTML=message;
-
-
-errorPopup.style.display="flex";
-
+document.getElementById("errorPopup").style.display="flex";
 
 }
 
 
 
+
 function closeError(){
 
-
-errorPopup.style.display="none";
-
+document.getElementById("errorPopup").style.display="none";
 
 }
 
@@ -811,6 +820,7 @@ errorPopup.style.display="none";
 
 function showMessage(){
 
+let msg=document.getElementById("msg");
 
 msg.style.display="block";
 
@@ -827,8 +837,8 @@ msg.style.display="none";
 
 
 
-displayRules();
 
+displayRules();
 
 
 </script>
@@ -838,5 +848,4 @@ displayRules();
 </body>
 
 </html>
-
 
