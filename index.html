@@ -1,80 +1,184 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Custom Shipping Rates</title>
-    <style>
-        body{
-            font-family: Arial;
-            padding: 30px;
-        }
+<title>Custom Shipping Rates</title>
 
-        input, button{
-            padding:10px;
-            margin:8px;
-            width:250px;
-        }
+<style>
+body{
+    font-family: Arial, sans-serif;
+    padding:30px;
+    background:#f5f5f5;
+}
 
-        button{
-            background:#000;
-            color:white;
-            border:none;
-            cursor:pointer;
-        }
+.container{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    max-width:700px;
+}
 
-        table{
-            margin-top:20px;
-            border-collapse:collapse;
-            width:100%;
-        }
+input,button{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    box-sizing:border-box;
+}
 
-        td,th{
-            border:1px solid #ddd;
-            padding:10px;
-        }
-    </style>
+button{
+    background:#000;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+
+.delete{
+    background:red;
+}
+</style>
+
 </head>
 
 <body>
 
+<div class="container">
+
 <h2>Custom Shipping Rates Manager</h2>
 
-<input type="text" placeholder="Rule Name">
 
-<br>
+<input id="location" placeholder="Customer Location">
 
-<input type="text" placeholder="Customer Location">
+<input id="minWeight" type="number" placeholder="Minimum Weight (kg)">
 
-<br>
+<input id="maxWeight" type="number" placeholder="Maximum Weight (kg)">
 
-<input type="number" placeholder="Minimum Weight (kg)">
+<input id="distance" type="number" placeholder="Distance (km)">
 
-<br>
+<input id="price" type="number" placeholder="Shipping Cost">
 
-<input type="number" placeholder="Maximum Weight (kg)">
+<button onclick="addRule()">
+Add Shipping Rule
+</button>
 
-<br>
 
-<input type="number" placeholder="Shipping Cost">
-
-<br>
-
-<button>Add Shipping Rule</button>
-
+<h3>Shipping Rules</h3>
 
 <table>
+
+<thead>
 <tr>
 <th>Location</th>
 <th>Weight</th>
+<th>Distance</th>
 <th>Cost</th>
+<th>Action</th>
 </tr>
+</thead>
 
-<tr>
-<td>Tamil Nadu</td>
-<td>0-5 kg</td>
-<td>₹80</td>
-</tr>
+<tbody id="rules">
+
+</tbody>
 
 </table>
+
+</div>
+
+
+<script>
+
+let rules = JSON.parse(localStorage.getItem("shippingRules")) || [];
+
+
+function addRule(){
+
+let rule={
+location:document.getElementById("location").value,
+minWeight:document.getElementById("minWeight").value,
+maxWeight:document.getElementById("maxWeight").value,
+distance:document.getElementById("distance").value,
+price:document.getElementById("price").value
+};
+
+
+rules.push(rule);
+
+localStorage.setItem(
+"shippingRules",
+JSON.stringify(rules)
+);
+
+
+displayRules();
+
+}
+
+
+function displayRules(){
+
+let table="";
+
+
+rules.forEach((r,index)=>{
+
+table += `
+<tr>
+
+<td>${r.location}</td>
+
+<td>${r.minWeight} - ${r.maxWeight} kg</td>
+
+<td>${r.distance} km</td>
+
+<td>₹${r.price}</td>
+
+<td>
+<button class="delete" onclick="deleteRule(${index})">
+Delete
+</button>
+</td>
+
+</tr>
+`;
+
+});
+
+
+document.getElementById("rules").innerHTML=table;
+
+}
+
+
+
+function deleteRule(index){
+
+rules.splice(index,1);
+
+localStorage.setItem(
+"shippingRules",
+JSON.stringify(rules)
+);
+
+displayRules();
+
+}
+
+
+displayRules();
+
+
+</script>
+
 
 </body>
 </html>
