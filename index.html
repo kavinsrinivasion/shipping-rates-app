@@ -1,116 +1,247 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
-<title>Custom Shipping Rates</title>
+
+<title>Custom Shipping Rates Manager</title>
+
 
 <style>
+
 body{
     font-family:Arial;
     background:#f4f4f4;
     padding:30px;
 }
 
+
 .container{
-    max-width:800px;
+
+    max-width:900px;
     margin:auto;
-    background:#fff;
-    padding:20px;
-    border-radius:10px;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+
 }
+
 
 input,button{
+
     width:100%;
-    padding:10px;
+    padding:12px;
     margin:8px 0;
     box-sizing:border-box;
+
 }
+
 
 button{
+
     background:#000;
-    color:#fff;
+    color:white;
     border:none;
     cursor:pointer;
+    border-radius:5px;
+
 }
+
 
 button:hover{
-    opacity:.9;
+
+    opacity:.85;
+
 }
 
+
 table{
+
     width:100%;
     border-collapse:collapse;
     margin-top:20px;
+
 }
+
+
+th{
+
+    background:#222;
+    color:white;
+
+}
+
 
 th,td{
+
     border:1px solid #ddd;
-    padding:10px;
+    padding:12px;
     text-align:center;
+
 }
+
+
+tr:nth-child(even){
+
+    background:#f7f7f7;
+
+}
+
+
+tr:hover{
+
+    background:#eeeeee;
+
+}
+
 
 .delete{
+
     background:#d32f2f;
+
 }
 
+
+.edit{
+
+    background:#1976d2;
+
+}
+
+
 #msg{
+
     display:none;
     background:#d4edda;
     color:#155724;
     padding:10px;
     border-radius:5px;
     margin-top:10px;
+
 }
+
+
+#counter{
+
+    background:#eee;
+    padding:10px;
+    border-radius:8px;
+
+}
+
+
 </style>
 
 </head>
 
 
+
 <body>
+
 
 <div class="container">
 
-<h2>Custom Shipping Rates Manager</h2>
+
+<h2>
+Custom Shipping Rates Manager
+</h2>
 
 
-<input id="location" maxlength="50" placeholder="Customer Location">
-
-<input id="minWeight" type="number" placeholder="Minimum Weight (kg)">
-
-<input id="maxWeight" type="number" placeholder="Maximum Weight (kg)">
-
-<input id="distance" type="number" placeholder="Distance (1 - 500 km)">
-
-<input id="price" type="number" placeholder="Shipping Cost">
+<h3 id="counter">
+Total Rules: 0
+</h3>
 
 
-<button onclick="addRule()">Add Shipping Rule</button>
+
+<input 
+id="location"
+maxlength="50"
+placeholder="Customer Location">
+
+
+
+<input 
+id="minWeight"
+type="number"
+placeholder="Minimum Weight (kg)">
+
+
+
+<input 
+id="maxWeight"
+type="number"
+placeholder="Maximum Weight (kg)">
+
+
+
+<input 
+id="distance"
+type="number"
+placeholder="Distance (1-500 km)">
+
+
+
+<input 
+id="price"
+type="number"
+placeholder="Shipping Cost">
+
+
+
+<button onclick="addRule()">
+
+Add Shipping Rule
+
+</button>
+
+
+
+<input 
+id="search"
+placeholder="Search Location">
+
 
 
 <div id="msg">
-✅ Rule Added Successfully!
+
+✅ Rule Saved Successfully
+
 </div>
+
 
 
 
 <table>
 
+
 <thead>
 
 <tr>
+
 <th>Location</th>
+
 <th>Weight</th>
+
 <th>Distance</th>
+
 <th>Cost</th>
+
 <th>Action</th>
+
+
 </tr>
+
 
 </thead>
 
 
+
 <tbody id="rules">
 
+
 </tbody>
+
 
 
 </table>
@@ -120,66 +251,74 @@ th,td{
 
 
 
+
 <script>
 
 
 let rules = JSON.parse(localStorage.getItem("shippingRules")) || [];
+
+let editIndex = -1;
+
 
 
 
 function addRule(){
 
 
-let location = document.getElementById("location").value.trim();
-
-let minWeight = document.getElementById("minWeight").value;
-
-let maxWeight = document.getElementById("maxWeight").value;
-
-let distance = document.getElementById("distance").value;
-
-let price = document.getElementById("price").value;
+let location =
+document.getElementById("location").value.trim();
 
 
+let minWeight =
+document.getElementById("minWeight").value;
 
-// Empty check
+
+let maxWeight =
+document.getElementById("maxWeight").value;
+
+
+let distance =
+document.getElementById("distance").value;
+
+
+let price =
+document.getElementById("price").value;
+
+
 
 if(!location || !minWeight || !maxWeight || !distance || !price){
 
 alert("Please fill all fields");
-
 return;
 
 }
 
 
 
-// Location validation
 
 if(location.length < 3){
 
-alert("Location minimum 3 characters required");
+alert("Location minimum 3 characters");
 
 return;
 
 }
+
 
 
 if(location.length > 50){
 
-alert("Location maximum 50 characters only");
+alert("Location maximum 50 characters");
 
 return;
 
 }
 
 
-
-// Distance validation
 
 if(distance < 1 || distance > 500){
 
-alert("Distance must be between 1 and 500 km");
+alert("Distance should be between 1-500 km");
 
 return;
 
@@ -187,11 +326,11 @@ return;
 
 
 
-// Weight validation
 
 if(Number(minWeight) > Number(maxWeight)){
 
-alert("Minimum weight cannot be greater than maximum weight");
+
+alert("Invalid weight range");
 
 return;
 
@@ -199,11 +338,10 @@ return;
 
 
 
-// Price validation
 
-if(Number(price) <= 0){
+if(price <=0){
 
-alert("Shipping cost must be greater than zero");
+alert("Invalid price");
 
 return;
 
@@ -211,34 +349,316 @@ return;
 
 
 
-// Save rule
 
-rules.push({
 
-location:location,
+let duplicate = rules.some((rule,index)=>{
 
-minWeight:minWeight,
 
-maxWeight:maxWeight,
+return (
 
-distance:distance,
+rule.location.toLowerCase()==location.toLowerCase()
+&&
+rule.minWeight==minWeight
+&&
+rule.maxWeight==maxWeight
+&&
+rule.distance==distance
+&&
+index!=editIndex
 
-price:price
+);
+
 
 });
 
 
 
-// Save in browser
+if(duplicate){
 
-localStorage.setItem(
-"shippingRules",
-JSON.stringify(rules)
+alert("Duplicate Rule Already Exists");
+
+return;
+
+}
+
+
+
+
+let newRule={
+
+location,
+
+minWeight,
+
+maxWeight,
+
+distance,
+
+price
+
+};
+
+
+
+
+if(editIndex==-1){
+
+
+rules.push(newRule);
+
+
+}
+
+else{
+
+
+rules[editIndex]=newRule;
+
+editIndex=-1;
+
+
+}
+
+
+
+
+
+saveData();
+
+
+clearInputs();
+
+
+displayRules();
+
+
+showMessage();
+
+
+}
+
+
+
+
+
+
+function editRule(index){
+
+
+
+let rule=rules[index];
+
+
+
+document.getElementById("location").value=rule.location;
+
+
+document.getElementById("minWeight").value=rule.minWeight;
+
+
+document.getElementById("maxWeight").value=rule.maxWeight;
+
+
+document.getElementById("distance").value=rule.distance;
+
+
+document.getElementById("price").value=rule.price;
+
+
+
+editIndex=index;
+
+
+
+window.scrollTo(0,0);
+
+
+}
+
+
+
+
+
+
+function deleteRule(index){
+
+
+let result =
+confirm("Are you sure you want to delete?");
+
+
+if(result){
+
+
+rules.splice(index,1);
+
+
+saveData();
+
+
+displayRules();
+
+
+}
+
+
+}
+
+
+
+
+
+function searchRule(){
+
+
+let value =
+document.getElementById("search").value.toLowerCase();
+
+
+
+let filtered =
+rules.filter(rule=>
+
+rule.location.toLowerCase()
+.includes(value)
+
 );
 
 
 
-// Clear inputs
+displayTable(filtered);
+
+
+
+}
+
+
+
+
+
+document.getElementById("search")
+.addEventListener("keyup",searchRule);
+
+
+
+
+
+
+
+function displayRules(){
+
+displayTable(rules);
+
+}
+
+
+
+
+
+function displayTable(data){
+
+
+
+let output="";
+
+
+
+data.forEach((rule,index)=>{
+
+
+output+=`
+
+<tr>
+
+<td>${rule.location}</td>
+
+<td>
+${rule.minWeight}-${rule.maxWeight} kg
+</td>
+
+<td>
+${rule.distance} km
+</td>
+
+<td>
+₹${rule.price}
+</td>
+
+
+<td>
+
+
+<button class="edit"
+onclick="editRule(${index})">
+
+Edit
+
+</button>
+
+
+
+<button class="delete"
+onclick="deleteRule(${index})">
+
+Delete
+
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+`;
+
+
+
+});
+
+
+
+
+document.getElementById("rules").innerHTML=output;
+
+
+
+document.getElementById("counter").innerHTML=
+
+"Total Rules: "+rules.length;
+
+
+
+}
+
+
+
+
+
+
+
+function saveData(){
+
+
+localStorage.setItem(
+
+"shippingRules",
+
+JSON.stringify(rules)
+
+);
+
+
+}
+
+
+
+
+
+
+function clearInputs(){
+
 
 document.getElementById("location").value="";
 
@@ -251,23 +671,27 @@ document.getElementById("distance").value="";
 document.getElementById("price").value="";
 
 
-
-// Refresh table
-
-displayRules();
+}
 
 
 
-// Message
+
+
+
+function showMessage(){
+
 
 let msg=document.getElementById("msg");
+
 
 msg.style.display="block";
 
 
-setTimeout(function(){
+setTimeout(()=>{
+
 
 msg.style.display="none";
+
 
 },2000);
 
@@ -278,82 +702,14 @@ msg.style.display="none";
 
 
 
-function deleteRule(index){
-
-
-rules.splice(index,1);
-
-
-localStorage.setItem(
-"shippingRules",
-JSON.stringify(rules)
-);
-
-
 displayRules();
 
-
-}
-
-
-
-
-
-function displayRules(){
-
-
-let output="";
-
-
-rules.forEach(function(rule,index){
-
-
-output += `
-
-<tr>
-
-<td>${rule.location}</td>
-
-<td>${rule.minWeight} - ${rule.maxWeight} kg</td>
-
-<td>${rule.distance} km</td>
-
-<td>₹${rule.price}</td>
-
-<td>
-
-<button class="delete" onclick="deleteRule(${index})">
-
-Delete
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-
-});
-
-
-document.getElementById("rules").innerHTML = output;
-
-
-}
-
-
-
-
-
-// Load existing rules
-
-displayRules();
 
 
 </script>
 
 
+
 </body>
+
 </html>
