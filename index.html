@@ -15,6 +15,7 @@ background:#f4f4f4;
 padding:30px;
 }
 
+
 .container{
 max-width:900px;
 margin:auto;
@@ -37,7 +38,7 @@ background:#000;
 color:white;
 border:none;
 cursor:pointer;
-border-radius:5px;
+border-radius:6px;
 }
 
 
@@ -73,6 +74,11 @@ text-align:center;
 }
 
 
+tr:nth-child(even){
+background:#f8f8f8;
+}
+
+
 .edit{
 background:#1976d2;
 }
@@ -83,12 +89,12 @@ background:#d32f2f;
 }
 
 
-
 #msg{
 display:none;
 background:#d4edda;
 color:#155724;
 padding:10px;
+border-radius:5px;
 }
 
 
@@ -130,13 +136,11 @@ color:red;
 
 </style>
 
-
 </head>
 
 
 
 <body>
-
 
 
 <div class="container">
@@ -145,6 +149,7 @@ color:red;
 <h2>
 Custom Shipping Rates Manager
 </h2>
+
 
 
 <h3 id="counter">
@@ -190,12 +195,10 @@ Add Shipping Rule
 
 
 
+
 <div id="msg">
-
 ✅ Rule Added Successfully
-
 </div>
-
 
 
 
@@ -209,6 +212,8 @@ onkeyup="searchRule()">
 
 
 
+
+
 <table>
 
 
@@ -217,9 +222,13 @@ onkeyup="searchRule()">
 <tr>
 
 <th>Location</th>
+
 <th>Weight</th>
+
 <th>Distance</th>
+
 <th>Cost</th>
+
 <th>Action</th>
 
 </tr>
@@ -228,14 +237,12 @@ onkeyup="searchRule()">
 </thead>
 
 
-
 <tbody id="ruleTable">
 
 </tbody>
 
 
 </table>
-
 
 
 </div>
@@ -248,15 +255,14 @@ onkeyup="searchRule()">
 
 <!-- EDIT POPUP -->
 
+
 <div id="editPopup" class="popup">
 
 
 <div class="popup-box">
 
 
-<h3>
-Edit Rule
-</h3>
+<h3>Edit Rule</h3>
 
 
 <input id="editLocation">
@@ -308,15 +314,14 @@ Cancel
 
 <!-- ERROR POPUP -->
 
+
 <div id="errorPopup" class="error-popup">
 
 
 <div class="error-box">
 
 
-<h3>
-Error
-</h3>
+<h3>Error</h3>
 
 
 <p id="errorText"></p>
@@ -343,7 +348,7 @@ OK
 <script>
 
 
-let shippingRules = 
+let shippingRules =
 JSON.parse(localStorage.getItem("shippingRules")) || [];
 
 
@@ -356,8 +361,7 @@ let editIndex=-1;
 function addRule(){
 
 
-
-let locationValue =
+let location =
 document.getElementById("location").value.trim();
 
 
@@ -380,7 +384,7 @@ document.getElementById("price").value;
 
 
 if(
-locationValue=="" ||
+location=="" ||
 minWeight=="" ||
 maxWeight=="" ||
 distance=="" ||
@@ -410,14 +414,13 @@ return;
 
 
 
-
 let duplicate =
 shippingRules.some(rule=>
 
 
 rule.location.toLowerCase()
 ==
-locationValue.toLowerCase()
+location.toLowerCase()
 
 &&
 
@@ -452,11 +455,11 @@ return;
 
 shippingRules.push({
 
-location:locationValue,
-minWeight:minWeight,
-maxWeight:maxWeight,
-distance:distance,
-price:price
+location,
+minWeight,
+maxWeight,
+distance,
+price
 
 });
 
@@ -484,21 +487,31 @@ showMessage();
 function editRule(index){
 
 
-let r=shippingRules[index];
+let rule=shippingRules[index];
 
 
 editIndex=index;
 
 
-document.getElementById("editLocation").value=r.location;
 
-document.getElementById("editMinWeight").value=r.minWeight;
+document.getElementById("editLocation").value=
+rule.location;
 
-document.getElementById("editMaxWeight").value=r.maxWeight;
 
-document.getElementById("editDistance").value=r.distance;
+document.getElementById("editMinWeight").value=
+rule.minWeight;
 
-document.getElementById("editPrice").value=r.price;
+
+document.getElementById("editMaxWeight").value=
+rule.maxWeight;
+
+
+document.getElementById("editDistance").value=
+rule.distance;
+
+
+document.getElementById("editPrice").value=
+rule.price;
 
 
 
@@ -516,23 +529,24 @@ document.getElementById("editPopup").style.display="flex";
 function saveEdit(){
 
 
-let locationValue=
+
+let location =
 document.getElementById("editLocation").value;
 
 
-let minWeight=
+let minWeight =
 document.getElementById("editMinWeight").value;
 
 
-let maxWeight=
+let maxWeight =
 document.getElementById("editMaxWeight").value;
 
 
-let distance=
+let distance =
 document.getElementById("editDistance").value;
 
 
-let price=
+let price =
 document.getElementById("editPrice").value;
 
 
@@ -547,7 +561,7 @@ return index!=editIndex &&
 
 rule.location.toLowerCase()
 ==
-locationValue.toLowerCase()
+location.toLowerCase()
 
 &&
 
@@ -569,7 +583,7 @@ rule.distance==distance;
 if(duplicate){
 
 showError(
-"Same Min Weight Max Weight Distance Exists"
+"Same Rule Already Exists"
 );
 
 return;
@@ -579,10 +593,9 @@ return;
 
 
 
-
 shippingRules[editIndex]={
 
-location:locationValue,
+location,
 minWeight,
 maxWeight,
 distance,
@@ -618,6 +631,7 @@ shippingRules.splice(index,1);
 
 saveData();
 
+
 displayRules();
 
 
@@ -637,21 +651,25 @@ function searchRule(){
 
 
 let value =
-document.getElementById("search").value.toLowerCase();
+document.getElementById("search")
+.value
+.toLowerCase();
 
 
 
-let filtered =
+let result =
 shippingRules.filter(rule=>
+
 
 rule.location.toLowerCase()
 .includes(value)
+
 
 );
 
 
 
-displayTable(filtered);
+displayTable(result);
 
 
 }
@@ -680,6 +698,7 @@ function displayTable(data){
 let output="";
 
 
+
 data.forEach((rule,index)=>{
 
 
@@ -688,6 +707,7 @@ output+=`
 <tr>
 
 <td>${rule.location}</td>
+
 
 <td>
 ${rule.minWeight}-${rule.maxWeight} kg
@@ -732,15 +752,20 @@ Delete
 `;
 
 
+
 });
 
 
 
-document.getElementById("ruleTable").innerHTML=output;
+document.getElementById("ruleTable")
+.innerHTML=output;
 
 
-document.getElementById("counter").innerHTML=
+
+document.getElementById("counter")
+.innerHTML=
 "Total Rules: "+shippingRules.length;
+
 
 
 }
@@ -772,7 +797,9 @@ document.getElementById("price").value="";
 
 
 
+
 function saveData(){
+
 
 localStorage.setItem(
 
@@ -782,7 +809,9 @@ JSON.stringify(shippingRules)
 
 );
 
+
 }
+
 
 
 
@@ -791,7 +820,8 @@ JSON.stringify(shippingRules)
 
 function closeEdit(){
 
-document.getElementById("editPopup").style.display="none";
+document.getElementById("editPopup")
+.style.display="none";
 
 }
 
@@ -800,18 +830,22 @@ document.getElementById("editPopup").style.display="none";
 
 function showError(message){
 
-document.getElementById("errorText").innerHTML=message;
+document.getElementById("errorText")
+.innerHTML=message;
 
-document.getElementById("errorPopup").style.display="flex";
+
+document.getElementById("errorPopup")
+.style.display="flex";
+
 
 }
 
 
 
-
 function closeError(){
 
-document.getElementById("errorPopup").style.display="none";
+document.getElementById("errorPopup")
+.style.display="none";
 
 }
 
@@ -820,7 +854,9 @@ document.getElementById("errorPopup").style.display="none";
 
 function showMessage(){
 
+
 let msg=document.getElementById("msg");
+
 
 msg.style.display="block";
 
@@ -837,12 +873,10 @@ msg.style.display="none";
 
 
 
-
 displayRules();
 
 
 </script>
-
 
 
 </body>
