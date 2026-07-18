@@ -1,81 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Custom Shipping Rates</title>
-
 <style>
-body{
-    font-family: Arial, sans-serif;
-    padding:30px;
-    background:#f5f5f5;
-}
-
-.container{
-    background:white;
-    padding:25px;
-    border-radius:10px;
-    max-width:700px;
-}
-
-input,button{
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    box-sizing:border-box;
-}
-
-button{
-    background:#000;
-    color:white;
-    border:none;
-    cursor:pointer;
-}
-
-table{
-    width:100%;
-    margin-top:20px;
-    border-collapse:collapse;
-}
-
-th,td{
-    border:1px solid #ddd;
-    padding:10px;
-    text-align:center;
-}
-
-.delete{
-    background:red;
-}
+body{font-family:Arial;background:#f4f4f4;padding:30px}
+.container{max-width:800px;margin:auto;background:#fff;padding:20px;border-radius:10px}
+input,button{width:100%;padding:10px;margin:8px 0;box-sizing:border-box}
+button{background:#000;color:#fff;border:none;cursor:pointer}
+button:hover{opacity:.9}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{border:1px solid #ddd;padding:10px;text-align:center}
+.delete{background:#d32f2f}
+#msg{display:none;background:#d4edda;color:#155724;padding:10px;border-radius:5px;margin-top:10px}
 </style>
-
 </head>
-
 <body>
-
 <div class="container">
-
 <h2>Custom Shipping Rates Manager</h2>
 
-
 <input id="location" placeholder="Customer Location">
-
 <input id="minWeight" type="number" placeholder="Minimum Weight (kg)">
-
 <input id="maxWeight" type="number" placeholder="Maximum Weight (kg)">
-
 <input id="distance" type="number" placeholder="Distance (km)">
-
 <input id="price" type="number" placeholder="Shipping Cost">
 
-<button onclick="addRule()">
-Add Shipping Rule
-</button>
+<button onclick="addRule()">Add Shipping Rule</button>
 
-
-<h3>Shipping Rules</h3>
+<div id="msg">✅ Rule Added Successfully!</div>
 
 <table>
-
 <thead>
 <tr>
 <th>Location</th>
@@ -85,100 +39,61 @@ Add Shipping Rule
 <th>Action</th>
 </tr>
 </thead>
-
-<tbody id="rules">
-
-</tbody>
-
+<tbody id="rules"></tbody>
 </table>
-
 </div>
 
-
 <script>
-
-let rules = JSON.parse(localStorage.getItem("shippingRules")) || [];
-
+let rules=JSON.parse(localStorage.getItem("shippingRules"))||[];
 
 function addRule(){
+let location=document.getElementById("location").value.trim();
+let minWeight=document.getElementById("minWeight").value;
+let maxWeight=document.getElementById("maxWeight").value;
+let distance=document.getElementById("distance").value;
+let price=document.getElementById("price").value;
 
-let rule={
-location:document.getElementById("location").value,
-minWeight:document.getElementById("minWeight").value,
-maxWeight:document.getElementById("maxWeight").value,
-distance:document.getElementById("distance").value,
-price:document.getElementById("price").value
-};
+if(!location||!minWeight||!maxWeight||!distance||!price){
+alert("Please fill all fields");
+return;
+}
 
+rules.push({location,minWeight,maxWeight,distance,price});
+localStorage.setItem("shippingRules",JSON.stringify(rules));
 
-rules.push(rule);
-
-localStorage.setItem(
-"shippingRules",
-JSON.stringify(rules)
-);
-
+document.getElementById("location").value="";
+document.getElementById("minWeight").value="";
+document.getElementById("maxWeight").value="";
+document.getElementById("distance").value="";
+document.getElementById("price").value="";
 
 displayRules();
 
+let msg=document.getElementById("msg");
+msg.style.display="block";
+setTimeout(()=>msg.style.display="none",2000);
 }
 
+function deleteRule(i){
+rules.splice(i,1);
+localStorage.setItem("shippingRules",JSON.stringify(rules));
+displayRules();
+}
 
 function displayRules(){
-
-let table="";
-
-
-rules.forEach((r,index)=>{
-
-table += `
-<tr>
-
+let out="";
+rules.forEach((r,i)=>{
+out+=`<tr>
 <td>${r.location}</td>
-
-<td>${r.minWeight} - ${r.maxWeight} kg</td>
-
+<td>${r.minWeight}-${r.maxWeight} kg</td>
 <td>${r.distance} km</td>
-
 <td>₹${r.price}</td>
-
-<td>
-<button class="delete" onclick="deleteRule(${index})">
-Delete
-</button>
-</td>
-
-</tr>
-`;
-
+<td><button class="delete" onclick="deleteRule(${i})">Delete</button></td>
+</tr>`;
 });
-
-
-document.getElementById("rules").innerHTML=table;
-
+document.getElementById("rules").innerHTML=out;
 }
-
-
-
-function deleteRule(index){
-
-rules.splice(index,1);
-
-localStorage.setItem(
-"shippingRules",
-JSON.stringify(rules)
-);
-
 displayRules();
-
-}
-
-
-displayRules();
-
-
 </script>
-
-
 </body>
 </html>
