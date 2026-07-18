@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom Shipping Rates</title>
+    <style>
+        body{
+            font-family: Arial;
+            padding: 30px;
+        }
+
+        input, button{
+            padding:10px;
+            margin:8px;
+            width:250px;
+        }
+
+        button{
+            background:#000;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        table{
+            margin-top:20px;
+            border-collapse:collapse;
+            width:100%;
+        }
+
+        td,th{
+            border:1px solid #ddd;
+            padding:10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Custom Shipping Rates Manager</h2>
+
+<input type="text" placeholder="Rule Name">
+
+<br>
+
+<input type="text" placeholder="Customer Location">
+
+<br>
+
+<input type="number" placeholder="Minimum Weight (kg)">
+
+<br>
+
+<input type="number" placeholder="Maximum Weight (kg)">
+
+<br>
+
+<input type="number" placeholder="Shipping Cost">
+
+<br>
+
+<button>Add Shipping Rule</button>
+
+
+<table>
+<tr>
+<th>Location</th>
+<th>Weight</th>
+<th>Cost</th>
+</tr>
+
+<tr>
+<td>Tamil Nadu</td>
+<td>0-5 kg</td>
+<td>₹80</td>
+</tr>
+
+</table>
+
+</body>
+</html>
