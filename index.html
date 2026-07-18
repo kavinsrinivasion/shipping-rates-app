@@ -11,136 +11,194 @@
 <style>
 
 body{
-    font-family:Arial;
-    background:#f4f4f4;
-    padding:30px;
+font-family:Arial;
+background:#f4f4f4;
+padding:30px;
 }
 
 
 .container{
 
-    max-width:900px;
-    margin:auto;
-    background:white;
-    padding:25px;
-    border-radius:15px;
+max-width:900px;
+margin:auto;
+background:white;
+padding:25px;
+border-radius:15px;
 
 }
 
 
 input,button{
 
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    box-sizing:border-box;
+width:100%;
+padding:12px;
+margin:8px 0;
+box-sizing:border-box;
 
 }
 
 
 button{
 
-    background:#000;
-    color:white;
-    border:none;
-    cursor:pointer;
-    border-radius:5px;
+background:#000;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:6px;
 
 }
 
 
 button:hover{
 
-    opacity:.85;
+opacity:.85;
 
 }
 
 
+.locked{
+
+background:#eeeeee;
+
+}
+
+
+
+#counter{
+
+background:#eee;
+padding:10px;
+border-radius:8px;
+
+}
+
+
+
+/* TABLE */
+
 table{
 
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
 
 }
 
 
 th{
 
-    background:#222;
-    color:white;
+background:#222;
+color:white;
 
 }
 
 
 th,td{
 
-    border:1px solid #ddd;
-    padding:12px;
-    text-align:center;
+border:1px solid #ddd;
+padding:12px;
+text-align:center;
 
 }
 
 
 tr:nth-child(even){
 
-    background:#f7f7f7;
+background:#f8f8f8;
 
 }
 
 
 tr:hover{
 
-    background:#eeeeee;
+background:#eeeeee;
 
 }
 
-
-.delete{
-
-    background:#d32f2f;
-
-}
 
 
 .edit{
 
-    background:#1976d2;
+background:#1976d2;
 
 }
+
+
+
+.delete{
+
+background:#d32f2f;
+
+}
+
+
 
 
 #msg{
 
-    display:none;
-    background:#d4edda;
-    color:#155724;
-    padding:10px;
-    border-radius:5px;
-    margin-top:10px;
+display:none;
+background:#d4edda;
+color:#155724;
+padding:10px;
+border-radius:5px;
 
 }
 
 
-#counter{
 
-    background:#eee;
-    padding:10px;
-    border-radius:8px;
+/* POPUP */
+
+
+.popup,
+.error-popup{
+
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.5);
+justify-content:center;
+align-items:center;
 
 }
+
+
+
+.popup-box,
+.error-box{
+
+background:white;
+padding:25px;
+width:350px;
+border-radius:10px;
+text-align:center;
+
+}
+
+
+
+.error-box{
+
+color:red;
+
+}
+
 
 
 </style>
 
-</head>
 
+</head>
 
 
 <body>
 
 
+
 <div class="container">
+
 
 
 <h2>
@@ -154,61 +212,59 @@ Total Rules: 0
 
 
 
-<input 
-id="location"
-maxlength="50"
-placeholder="Customer Location">
+<input id="location"
+placeholder="Customer Location"
+oninput="lockInputs()">
 
 
 
-<input 
-id="minWeight"
+<input id="minWeight"
 type="number"
-placeholder="Minimum Weight (kg)">
+placeholder="Minimum Weight (kg)"
+oninput="lockInputs()">
 
 
 
-<input 
-id="maxWeight"
+<input id="maxWeight"
 type="number"
-placeholder="Maximum Weight (kg)">
+placeholder="Maximum Weight (kg)"
+oninput="lockInputs()">
 
 
 
-<input 
-id="distance"
+<input id="distance"
 type="number"
-placeholder="Distance (1-500 km)">
+placeholder="Distance (km)"
+oninput="lockInputs()">
 
 
 
-<input 
-id="price"
+<input id="price"
 type="number"
-placeholder="Shipping Cost">
+placeholder="Shipping Cost"
+oninput="lockInputs()">
 
 
 
 <button onclick="addRule()">
-
 Add Shipping Rule
-
 </button>
 
 
 
-<input 
-id="search"
-placeholder="Search Location">
-
-
-
 <div id="msg">
-
-✅ Rule Saved Successfully
-
+✅ Rule Added Successfully
 </div>
 
+
+
+<hr>
+
+
+
+<input id="search"
+placeholder="Search Location"
+onkeyup="searchRule()">
 
 
 
@@ -220,15 +276,10 @@ placeholder="Search Location">
 <tr>
 
 <th>Location</th>
-
 <th>Weight</th>
-
 <th>Distance</th>
-
 <th>Cost</th>
-
 <th>Action</th>
-
 
 </tr>
 
@@ -236,15 +287,13 @@ placeholder="Search Location">
 </thead>
 
 
-
 <tbody id="rules">
-
 
 </tbody>
 
 
-
 </table>
+
 
 
 </div>
@@ -252,12 +301,163 @@ placeholder="Search Location">
 
 
 
+
+
+
+<!-- EDIT POPUP -->
+
+
+<div id="editPopup" class="popup">
+
+
+<div class="popup-box">
+
+
+<h3>Edit Rule</h3>
+
+
+<input id="editLocation">
+
+
+<input id="editMinWeight"
+type="number">
+
+
+<input id="editMaxWeight"
+type="number">
+
+
+<input id="editDistance"
+type="number">
+
+
+<input id="editPrice"
+type="number">
+
+
+
+<button onclick="saveEdit()">
+Save Changes
+</button>
+
+
+<button onclick="closeEdit()">
+Cancel
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- ERROR POPUP -->
+
+
+<div id="errorPopup" class="error-popup">
+
+
+<div class="error-box">
+
+
+<h3>Error</h3>
+
+
+<p id="errorText"></p>
+
+
+<button onclick="closeError()">
+OK
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
 <script>
 
 
-let rules = JSON.parse(localStorage.getItem("shippingRules")) || [];
+let rules =
+JSON.parse(localStorage.getItem("shippingRules")) || [];
 
-let editIndex = -1;
+
+let isLocked=false;
+
+let editIndex=-1;
+
+let currentData=rules;
+
+
+
+
+
+
+function lockInputs(){
+
+
+if(isLocked)
+return;
+
+
+
+let inputs=document.querySelectorAll(
+".container input:not(#search)"
+);
+
+
+
+let filled=false;
+
+
+inputs.forEach(input=>{
+
+if(input.value!="")
+filled=true;
+
+});
+
+
+
+if(filled){
+
+
+isLocked=true;
+
+
+inputs.forEach(input=>{
+
+input.readOnly=true;
+
+input.classList.add("locked");
+
+});
+
+
+}
+
+
+}
+
+
+
 
 
 
@@ -265,117 +465,76 @@ let editIndex = -1;
 function addRule(){
 
 
-let location =
+let location=
 document.getElementById("location").value.trim();
 
 
-let minWeight =
+let minWeight=
 document.getElementById("minWeight").value;
 
 
-let maxWeight =
+let maxWeight=
 document.getElementById("maxWeight").value;
 
 
-let distance =
+let distance=
 document.getElementById("distance").value;
 
 
-let price =
+let price=
 document.getElementById("price").value;
 
 
 
-if(!location || !minWeight || !maxWeight || !distance || !price){
-
-alert("Please fill all fields");
-return;
-
-}
 
 
+if(!location||
+!minWeight||
+!maxWeight||
+!distance||
+!price){
 
 
-if(location.length < 3){
-
-alert("Location minimum 3 characters");
-
-return;
-
-}
-
-
-
-if(location.length > 50){
-
-alert("Location maximum 50 characters");
-
-return;
-
-}
-
-
-
-if(distance < 1 || distance > 500){
-
-alert("Distance should be between 1-500 km");
-
-return;
-
-}
-
-
-
-
-if(Number(minWeight) > Number(maxWeight)){
-
-
-alert("Invalid weight range");
-
-return;
-
-}
-
-
-
-
-if(price <=0){
-
-alert("Invalid price");
-
-return;
-
-}
-
-
-
-
-
-let duplicate = rules.some((rule,index)=>{
-
-
-return (
-
-rule.location.toLowerCase()==location.toLowerCase()
-&&
-rule.minWeight==minWeight
-&&
-rule.maxWeight==maxWeight
-&&
-rule.distance==distance
-&&
-index!=editIndex
-
+showError(
+"Please fill all fields"
 );
 
+return;
 
-});
+}
+
+
+
+
+
+let duplicate =
+rules.some(r=>
+
+r.location.toLowerCase()
+==
+location.toLowerCase()
+
+&&
+
+r.minWeight==minWeight
+
+&&
+
+r.maxWeight==maxWeight
+
+&&
+
+r.distance==distance
+
+);
 
 
 
 if(duplicate){
 
-alert("Duplicate Rule Already Exists");
+showError(
+"Same Rule Already Exists"
+);
 
 return;
 
@@ -384,53 +543,24 @@ return;
 
 
 
-let newRule={
+
+rules.push({
 
 location,
-
 minWeight,
-
 maxWeight,
-
 distance,
-
 price
 
-};
-
-
-
-
-if(editIndex==-1){
-
-
-rules.push(newRule);
-
-
-}
-
-else{
-
-
-rules[editIndex]=newRule;
-
-editIndex=-1;
-
-
-}
-
-
+});
 
 
 
 saveData();
 
-
 clearInputs();
 
-
 displayRules();
-
 
 showMessage();
 
@@ -442,35 +572,31 @@ showMessage();
 
 
 
-function editRule(index){
+
+
+function editRule(i){
 
 
 
-let rule=rules[index];
+let r=rules[i];
+
+editIndex=i;
 
 
 
-document.getElementById("location").value=rule.location;
+editLocation.value=r.location;
 
+editMinWeight.value=r.minWeight;
 
-document.getElementById("minWeight").value=rule.minWeight;
+editMaxWeight.value=r.maxWeight;
 
+editDistance.value=r.distance;
 
-document.getElementById("maxWeight").value=rule.maxWeight;
-
-
-document.getElementById("distance").value=rule.distance;
-
-
-document.getElementById("price").value=rule.price;
+editPrice.value=r.price;
 
 
 
-editIndex=index;
-
-
-
-window.scrollTo(0,0);
+editPopup.style.display="flex";
 
 
 }
@@ -480,21 +606,103 @@ window.scrollTo(0,0);
 
 
 
-function deleteRule(index){
+
+function saveEdit(){
 
 
-let result =
-confirm("Are you sure you want to delete?");
+
+let location=editLocation.value;
+
+let minWeight=editMinWeight.value;
+
+let maxWeight=editMaxWeight.value;
+
+let distance=editDistance.value;
+
+let price=editPrice.value;
 
 
-if(result){
 
 
-rules.splice(index,1);
+let duplicate =
+rules.some((r,i)=>
+
+i!=editIndex &&
+
+r.location.toLowerCase()
+==
+location.toLowerCase()
+
+&&
+
+r.minWeight==minWeight
+
+&&
+
+r.maxWeight==maxWeight
+
+&&
+
+r.distance==distance
+
+);
+
+
+
+if(duplicate){
+
+showError(
+"Same Min Weight, Max Weight and Distance Exists"
+);
+
+return;
+
+}
+
+
+
+
+
+rules[editIndex]={
+
+location,
+minWeight,
+maxWeight,
+distance,
+price
+
+};
+
 
 
 saveData();
 
+closeEdit();
+
+displayRules();
+
+
+}
+
+
+
+
+
+
+
+
+function deleteRule(i){
+
+
+if(confirm(
+"Are you sure delete?"
+)){
+
+
+rules.splice(i,1);
+
+
+saveData();
 
 displayRules();
 
@@ -508,36 +716,30 @@ displayRules();
 
 
 
+
+
 function searchRule(){
 
 
-let value =
-document.getElementById("search").value.toLowerCase();
+let value=
+search.value.toLowerCase();
 
 
 
-let filtered =
-rules.filter(rule=>
+currentData =
+rules.filter(r=>
 
-rule.location.toLowerCase()
+r.location.toLowerCase()
 .includes(value)
 
 );
 
 
 
-displayTable(filtered);
-
+displayTable(currentData);
 
 
 }
-
-
-
-
-
-document.getElementById("search")
-.addEventListener("keyup",searchRule);
 
 
 
@@ -547,9 +749,13 @@ document.getElementById("search")
 
 function displayRules(){
 
+currentData=rules;
+
 displayTable(rules);
 
 }
+
+
 
 
 
@@ -559,29 +765,29 @@ function displayTable(data){
 
 
 
-let output="";
+let out="";
 
 
 
-data.forEach((rule,index)=>{
+data.forEach((r,i)=>{
 
 
-output+=`
+out+=`
 
 <tr>
 
-<td>${rule.location}</td>
+<td>${r.location}</td>
 
 <td>
-${rule.minWeight}-${rule.maxWeight} kg
+${r.minWeight}-${r.maxWeight} kg
 </td>
 
 <td>
-${rule.distance} km
+${r.distance} km
 </td>
 
 <td>
-₹${rule.price}
+₹${r.price}
 </td>
 
 
@@ -589,19 +795,15 @@ ${rule.distance} km
 
 
 <button class="edit"
-onclick="editRule(${index})">
-
+onclick="editRule(${i})">
 Edit
-
 </button>
 
 
 
 <button class="delete"
-onclick="deleteRule(${index})">
-
+onclick="deleteRule(${i})">
 Delete
-
 </button>
 
 
@@ -609,7 +811,6 @@ Delete
 
 
 </tr>
-
 
 `;
 
@@ -619,13 +820,11 @@ Delete
 
 
 
-
-document.getElementById("rules").innerHTML=output;
-
+rules.innerHTML=out;
 
 
-document.getElementById("counter").innerHTML=
 
+counter.innerHTML=
 "Total Rules: "+rules.length;
 
 
@@ -642,11 +841,8 @@ function saveData(){
 
 
 localStorage.setItem(
-
 "shippingRules",
-
 JSON.stringify(rules)
-
 );
 
 
@@ -657,18 +853,27 @@ JSON.stringify(rules)
 
 
 
+
 function clearInputs(){
 
 
-document.getElementById("location").value="";
+document.querySelectorAll(
+".container input:not(#search)"
+)
+.forEach(input=>{
 
-document.getElementById("minWeight").value="";
 
-document.getElementById("maxWeight").value="";
+input.value="";
 
-document.getElementById("distance").value="";
+input.readOnly=false;
 
-document.getElementById("price").value="";
+input.classList.remove("locked");
+
+
+});
+
+
+isLocked=false;
 
 
 }
@@ -678,20 +883,41 @@ document.getElementById("price").value="";
 
 
 
+function closeEdit(){
+
+editPopup.style.display="none";
+
+}
+
+
+
+
+function showError(msg){
+
+errorText.innerHTML=msg;
+
+errorPopup.style.display="flex";
+
+}
+
+
+
+function closeError(){
+
+errorPopup.style.display="none";
+
+}
+
+
+
 function showMessage(){
-
-
-let msg=document.getElementById("msg");
-
 
 msg.style.display="block";
 
 
 setTimeout(()=>{
 
-
 msg.style.display="none";
-
 
 },2000);
 
@@ -701,13 +927,11 @@ msg.style.display="none";
 
 
 
-
 displayRules();
 
 
 
 </script>
-
 
 
 </body>
