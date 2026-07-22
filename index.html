@@ -6,29 +6,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Custom Shipping Rates Dashboard</title>
+<title>Custom Shipping Rates Manager</title>
 
 <style>
 
 *{
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
 
 
 body{
 
-background:#f1f5f9;
-padding:30px;
+    background:#f1f5f9;
+    padding:30px;
 
 }
 
 
+.container{
 
-.dashboard{
-
-max-width:1100px;
-margin:auto;
+    max-width:1100px;
+    margin:auto;
 
 }
 
@@ -38,20 +39,22 @@ margin:auto;
 
 .header{
 
-background:#2563eb;
-color:white;
-padding:25px;
-border-radius:15px;
-margin-bottom:25px;
+    background:#2563eb;
+    color:white;
+    padding:25px;
+    border-radius:15px;
+    margin-bottom:20px;
 
 }
 
 
 .header h1{
 
-margin-bottom:8px;
+    margin-bottom:8px;
 
 }
+
+
 
 
 
@@ -59,53 +62,47 @@ margin-bottom:8px;
 
 .card{
 
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
-margin-bottom:25px;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    margin-bottom:20px;
 
 }
 
 
 
+
+
 .counter{
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
 }
 
 
 .counter h2{
 
-font-size:36px;
-color:#2563eb;
+    font-size:35px;
+    color:#2563eb;
 
 }
+
+
+
 
 
 
 /* Form */
 
 
-.form-card{
-
-background:white;
-padding:25px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
-
-}
-
-
-
 label{
 
-display:block;
-font-weight:bold;
-margin-top:15px;
+    display:block;
+    font-weight:bold;
+    margin-top:15px;
 
 }
 
@@ -113,12 +110,12 @@ margin-top:15px;
 
 input{
 
-width:100%;
-padding:12px;
-margin-top:5px;
-border:1px solid #ddd;
-border-radius:8px;
-font-size:15px;
+    width:100%;
+    padding:12px;
+    margin-top:5px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
 
 }
 
@@ -127,24 +124,27 @@ font-size:15px;
 
 .addBtn{
 
-width:100%;
-background:#2563eb;
-color:white;
-border:none;
-padding:14px;
-border-radius:8px;
-margin-top:20px;
-cursor:pointer;
-font-size:16px;
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
 
 }
 
 
 .addBtn:hover{
 
-background:#1d4ed8;
+    background:#1d4ed8;
 
 }
+
+
+
 
 
 
@@ -153,11 +153,10 @@ background:#1d4ed8;
 
 .table-card{
 
-background:white;
-padding:25px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
-margin-top:25px;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
 
 }
 
@@ -165,26 +164,29 @@ margin-top:25px;
 
 table{
 
-width:100%;
-border-collapse:collapse;
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
 
 }
+
 
 
 th{
 
-background:#2563eb;
-color:white;
-padding:12px;
+    background:#2563eb;
+    color:white;
+    padding:12px;
 
 }
 
 
+
 td{
 
-padding:12px;
-border-bottom:1px solid #ddd;
-text-align:center;
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
 
 }
 
@@ -192,14 +194,16 @@ text-align:center;
 
 .deleteBtn{
 
-background:#dc3545;
-color:white;
-border:none;
-padding:8px 15px;
-border-radius:6px;
-cursor:pointer;
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:6px;
+    cursor:pointer;
 
 }
+
+
 
 
 
@@ -209,15 +213,15 @@ cursor:pointer;
 
 .popup{
 
-display:none;
-position:fixed;
-top:0;
-left:0;
-height:100%;
-width:100%;
-background:rgba(0,0,0,.5);
-justify-content:center;
-align-items:center;
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.5);
+    justify-content:center;
+    align-items:center;
 
 }
 
@@ -225,19 +229,11 @@ align-items:center;
 
 .popup-box{
 
-background:white;
-width:350px;
-padding:25px;
-border-radius:15px;
-text-align:center;
-
-}
-
-
-
-.popup-box h3{
-
-margin-bottom:15px;
+    background:white;
+    width:350px;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
 
 }
 
@@ -245,12 +241,12 @@ margin-bottom:15px;
 
 .popup-box button{
 
-padding:10px 20px;
-border:none;
-border-radius:6px;
-color:white;
-cursor:pointer;
-margin:10px;
+    padding:10px 20px;
+    border:none;
+    border-radius:6px;
+    color:white;
+    cursor:pointer;
+    margin:10px;
 
 }
 
@@ -258,7 +254,7 @@ margin:10px;
 
 .deleteConfirm{
 
-background:#dc3545;
+    background:#dc3545;
 
 }
 
@@ -266,7 +262,7 @@ background:#dc3545;
 
 .cancelBtn{
 
-background:#6c757d;
+    background:#6c757d;
 
 }
 
@@ -274,13 +270,13 @@ background:#6c757d;
 
 .okBtn{
 
-background:#2563eb;
+    background:#2563eb;
 
 }
 
 
-
 </style>
+
 
 </head>
 
@@ -288,8 +284,7 @@ background:#2563eb;
 <body>
 
 
-<div class="dashboard">
-
+<div class="container">
 
 
 <div class="header">
@@ -299,7 +294,7 @@ background:#2563eb;
 </h1>
 
 <p>
-Manage your shipping rules easily
+Manage Shipping Rules Easily
 </p>
 
 </div>
@@ -327,13 +322,14 @@ Total Shipping Rules
 
 
 
-<div class="form-card">
+
+
+<div class="card">
 
 
 <h2>
 Add Shipping Rule
 </h2>
-
 
 
 
@@ -343,12 +339,18 @@ Customer Location
 
 
 <input
-id="location"
-type="text"
-maxlength="30"
-placeholder="Enter Location"
-oninput="this.value=this.value.replace(/[^A-Za-z\s]/g,'')">
 
+id="location"
+
+type="text"
+
+maxlength="30"
+
+placeholder="Enter Location"
+
+oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')"
+
+>
 
 
 
@@ -359,10 +361,14 @@ Minimum Weight (KG)
 
 
 <input
-id="minWeight"
-type="number"
-placeholder="Minimum Weight">
 
+id="minWeight"
+
+type="number"
+
+placeholder="Minimum Weight"
+
+>
 
 
 
@@ -373,10 +379,14 @@ Maximum Weight (KG)
 
 
 <input
-id="maxWeight"
-type="number"
-placeholder="Maximum Weight">
 
+id="maxWeight"
+
+type="number"
+
+placeholder="Maximum Weight"
+
+>
 
 
 
@@ -387,10 +397,14 @@ Distance (KM)
 
 
 <input
-id="distance"
-type="number"
-placeholder="Distance">
 
+id="distance"
+
+type="number"
+
+placeholder="Distance"
+
+>
 
 
 
@@ -401,26 +415,36 @@ Shipping Cost (₹)
 
 
 <input
+
 id="price"
+
 type="number"
-placeholder="Shipping Cost">
+
+placeholder="Shipping Cost"
+
+>
 
 
 
 
+<button 
+class="addBtn"
+onclick="addRule()">
 
-<button class="addBtn" onclick="addRule()">
-
-+ Add Shipping Rule
+Add Shipping Rule
 
 </button>
+
 
 
 </div>
 <!-- Shipping Rules List -->
 
-<div class="table-card" id="rulesSection" style="display:none;">
-
+<div 
+class="table-card" 
+id="rulesSection" 
+style="display:none;"
+>
 
 <h2>
 Shipping Rules List
@@ -428,7 +452,6 @@ Shipping Rules List
 
 
 <table>
-
 
 <thead>
 
@@ -456,58 +479,17 @@ Shipping Rules List
 </div>
 
 
-
-
 </div>
 
 
-
-
-
-<!-- Delete Confirm Popup -->
-
-<div id="deletePopup" class="popup">
-
-
-<div class="popup-box">
-
-
-<h3 style="color:red;">
-Confirm Delete
-</h3>
-
-
-<p>
-Are you sure you want to delete this Shipping Rule?
-</p>
-
-
-<button class="deleteConfirm" onclick="confirmDelete()">
-
-Delete
-
-</button>
-
-
-<button class="cancelBtn" onclick="closeDelete()">
-
-Cancel
-
-</button>
-
-
-</div>
-
-
-</div>
 
 
 
 
 <!-- Error Popup -->
 
-<div id="errorPopup" class="popup">
 
+<div id="errorPopup" class="popup">
 
 <div class="popup-box">
 
@@ -520,7 +502,9 @@ Error
 <p id="errorMessage"></p>
 
 
-<button class="okBtn" onclick="closeError()">
+<button 
+class="okBtn"
+onclick="closeError()">
 
 OK
 
@@ -529,8 +513,57 @@ OK
 
 </div>
 
+</div>
+
+
+
+
+
+
+
+<!-- Delete Popup -->
+
+
+<div id="deletePopup" class="popup">
+
+<div class="popup-box">
+
+
+<h3 style="color:red;">
+Delete Confirmation
+</h3>
+
+
+<p>
+Are you sure you want to delete this rule?
+</p>
+
+
+<button 
+class="deleteConfirm"
+onclick="confirmDelete()">
+
+Delete
+
+</button>
+
+
+
+<button 
+class="cancelBtn"
+onclick="closeDelete()">
+
+Cancel
+
+</button>
+
+
 
 </div>
+
+</div>
+
+
 
 
 
@@ -539,7 +572,8 @@ OK
 <script>
 
 
-let rules = JSON.parse(localStorage.getItem("shippingRules")) || [];
+let rules =
+JSON.parse(localStorage.getItem("shippingRules_v2")) || [];
 
 
 let deleteIndex = null;
@@ -548,15 +582,15 @@ let deleteIndex = null;
 
 displayRules();
 
-updateCounter();
+updateCount();
 
 
 
 
 
-// ======================
+
+
 // Error Popup
-// ======================
 
 
 function showError(message){
@@ -569,6 +603,7 @@ document.getElementById("errorPopup").style.display="flex";
 
 
 }
+
 
 
 
@@ -585,12 +620,14 @@ document.getElementById("errorPopup").style.display="none";
 
 
 
-// ======================
+
+
+
 // Add Rule
-// ======================
 
 
 function addRule(){
+
 
 
 let location =
@@ -616,20 +653,29 @@ document.getElementById("price").value;
 
 
 
+
 if(
+
 location=="" ||
+
 minWeight=="" ||
+
 maxWeight=="" ||
+
 distance=="" ||
+
 price==""
 
 ){
+
 
 showError("Please fill all fields.");
 
 return;
 
 }
+
+
 
 
 
@@ -642,10 +688,11 @@ showError(
 "Maximum weight must be greater than minimum weight."
 );
 
-
 return;
 
 }
+
+
 
 
 
@@ -667,11 +714,13 @@ return;
 
 
 
+
+
 if(Number(price)<=0){
 
 
 showError(
-"Shipping cost must be greater than 0."
+"Shipping Cost must be greater than 0."
 );
 
 
@@ -684,50 +733,85 @@ return;
 
 
 
-let duplicate = rules.some(rule =>
+
+// Duplicate Check
+
+let exists = rules.some(rule=>{
 
 
-rule.location.toLowerCase()==location.toLowerCase()
+return (
+
+rule.location.toLowerCase()
+===
+location.toLowerCase()
+
 
 &&
-rule.minWeight==minWeight
+
+
+Number(rule.minWeight)
+===
+Number(minWeight)
+
 
 &&
-rule.maxWeight==maxWeight
+
+
+Number(rule.maxWeight)
+===
+Number(maxWeight)
+
 
 &&
-rule.distance==distance
 
-&&
-rule.price==price
+
+Number(rule.distance)
+===
+Number(distance)
 
 
 );
 
 
+});
 
 
 
-if(duplicate){
 
 
-showError("Shipping Rule already exists.");
+
+if(exists){
+
+
+showError(
+"Shipping Rule already exists for this Location, Weight and Distance."
+);
+
 
 return;
+
 
 }
 
 
 
 
+
+
+
+// Save
 
 
 rules.push({
 
 location,
+
 minWeight,
+
 maxWeight,
+
 distance,
+
 price
 
 });
@@ -736,9 +820,10 @@ price
 
 
 
+
 localStorage.setItem(
 
-"shippingRules",
+"shippingRules_v2",
 
 JSON.stringify(rules)
 
@@ -748,25 +833,44 @@ JSON.stringify(rules)
 
 
 
+
 displayRules();
 
-updateCounter();
+updateCount();
 
 
 
-// Show list only after adding rule
-
-document.getElementById("rulesSection").style.display="block";
 
 
+
+
+// Show table after adding
 
 document.getElementById("rulesSection")
-.scrollIntoView({
+.style.display="block";
 
-behavior:"smooth"
 
-});
 
+
+
+
+
+// CLEAR INPUT AFTER SUCCESS ADD
+
+
+setTimeout(()=>{
+
+document.getElementById("location").value="";
+
+document.getElementById("minWeight").value="";
+
+document.getElementById("maxWeight").value="";
+
+document.getElementById("distance").value="";
+
+document.getElementById("price").value="";
+
+},3000);
 
 
 }
@@ -777,19 +881,20 @@ behavior:"smooth"
 
 
 
-// ======================
+
+
 // Display Rules
-// ======================
 
 
 function displayRules(){
 
 
-
-let tbody=document.getElementById("rules");
+let tbody =
+document.getElementById("rules");
 
 
 tbody.innerHTML="";
+
 
 
 
@@ -807,30 +912,26 @@ tbody.innerHTML += `
 
 
 <td>
-
 ${rule.minWeight} - ${rule.maxWeight} KG
-
 </td>
 
 
 <td>
-
 ${rule.distance} KM
-
 </td>
 
 
 <td>
-
 ₹${rule.price}
-
 </td>
 
 
 <td>
 
 
-<button class="deleteBtn"
+<button
+
+class="deleteBtn"
 
 onclick="deleteRule(${index})">
 
@@ -855,9 +956,22 @@ Delete
 
 
 
-if(rules.length > 0){
 
-document.getElementById("rulesSection").style.display="block";
+if(rules.length>0){
+
+
+document.getElementById("rulesSection")
+.style.display="block";
+
+
+}
+
+else{
+
+
+document.getElementById("rulesSection")
+.style.display="none";
+
 
 }
 
@@ -870,15 +984,16 @@ document.getElementById("rulesSection").style.display="block";
 
 
 
-// ======================
-// Counter
-// ======================
 
 
-function updateCounter(){
+// Count
 
 
-document.getElementById("totalRules").innerHTML = rules.length;
+function updateCount(){
+
+
+document.getElementById("totalRules")
+.innerHTML = rules.length;
 
 
 }
@@ -889,9 +1004,8 @@ document.getElementById("totalRules").innerHTML = rules.length;
 
 
 
-// ======================
+
 // Delete
-// ======================
 
 
 function deleteRule(index){
@@ -900,10 +1014,13 @@ function deleteRule(index){
 deleteIndex=index;
 
 
-document.getElementById("deletePopup").style.display="flex";
+document.getElementById("deletePopup")
+.style.display="flex";
 
 
 }
+
+
 
 
 
@@ -917,7 +1034,7 @@ rules.splice(deleteIndex,1);
 
 localStorage.setItem(
 
-"shippingRules",
+"shippingRules_v2",
 
 JSON.stringify(rules)
 
@@ -925,32 +1042,16 @@ JSON.stringify(rules)
 
 
 
-
-
 displayRules();
 
-updateCounter();
+updateCount();
+
 
 
 closeDelete();
 
 
-
-
-// Hide list if no rules
-
-if(rules.length==0){
-
-
-document.getElementById("rulesSection").style.display="none";
-
-
 }
-
-
-
-}
-
 
 
 
@@ -960,7 +1061,8 @@ document.getElementById("rulesSection").style.display="none";
 function closeDelete(){
 
 
-document.getElementById("deletePopup").style.display="none";
+document.getElementById("deletePopup")
+.style.display="none";
 
 
 }
@@ -968,7 +1070,6 @@ document.getElementById("deletePopup").style.display="none";
 
 
 </script>
-
 
 
 </body>
