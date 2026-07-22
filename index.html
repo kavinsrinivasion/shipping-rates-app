@@ -1,214 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Custom Shipping Rates Manager</title>
 
-
 <style>
 
-body{
-font-family:Arial;
-background:#f4f4f4;
-padding:30px;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
 }
 
+body{
+
+background:#f4f6f9;
+padding:40px;
+
+}
 
 .container{
 
 max-width:900px;
 margin:auto;
-background:white;
-padding:25px;
-border-radius:15px;
+background:#fff;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 15px rgba(0,0,0,.1);
 
 }
 
+h2{
 
-input,button{
+text-align:center;
+margin-bottom:25px;
+
+}
+
+label{
+
+font-weight:bold;
+
+}
+
+input{
 
 width:100%;
 padding:12px;
-margin:8px 0;
-box-sizing:border-box;
+margin-top:5px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:6px;
+font-size:15px;
 
 }
-
 
 button{
 
-background:#000;
+padding:12px;
+background:#0078ff;
 color:white;
 border:none;
-cursor:pointer;
 border-radius:6px;
+cursor:pointer;
+font-size:16px;
 
 }
-
 
 button:hover{
-opacity:.8;
-}
 
-
-#counter{
-
-background:#eee;
-padding:10px;
-border-radius:8px;
+background:#005fd1;
 
 }
 
-
-
-table{
-
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
-
-}
-
-
-th{
-
-background:#222;
-color:white;
-
-}
-
-
-th,td{
-
-border:1px solid #ddd;
-padding:12px;
-text-align:center;
-
-}
-
-
-.edit{
-
-background:#1976d2;
-
-}
-
-
-.delete{
-
-background:#d32f2f;
-
-}
-
-
-
-#msg{
+.success{
 
 display:none;
 background:#d4edda;
 color:#155724;
-padding:10px;
+padding:12px;
+margin-top:15px;
+border-radius:6px;
 
 }
 
+table{
 
-
-
-/* POPUPS */
-
-
-.popup,
-.error-popup{
-
-display:none;
-position:fixed;
-top:0;
-left:0;
 width:100%;
-height:100%;
-background:rgba(0,0,0,.5);
-justify-content:center;
-align-items:center;
+margin-top:25px;
+border-collapse:collapse;
 
 }
 
+table th{
 
+background:#0078ff;
+color:white;
+padding:12px;
 
-.popup-box,
-.error-box{
+}
 
-background:white;
-width:350px;
-padding:25px;
-border-radius:10px;
+table td{
+
+padding:10px;
+border:1px solid #ddd;
 text-align:center;
 
 }
 
+.delete{
 
-
-.error-box{
-
-color:red;
+background:red;
+color:white;
+padding:8px 12px;
+border:none;
+border-radius:5px;
+cursor:pointer;
 
 }
 
+.delete:hover{
 
+background:darkred;
+
+}
 
 </style>
 
-
 </head>
-
 
 <body>
 
-
 <div class="container">
 
+<h2>Custom Shipping Rates Manager</h2>
 
-<h2>
-Custom Shipping Rates Manager
-</h2>
+<div id="success" class="success">
 
+Rule Added Successfully
 
-<h3 id="counter">
-Total Rules: 0
-</h3>
+</div>
 
+<label>Customer Location</label>
 
+<input
+type="text"
+id="location"
+placeholder="Enter Customer Location"
+maxlength="30">
 
-<input id="location"
-placeholder="Customer Location">
+<label>Minimum Weight (kg)</label>
 
-
-
-<input id="minWeight"
+<input
 type="number"
-placeholder="Minimum Weight (kg)">
+id="minWeight"
+placeholder="Minimum Weight">
 
+<label>Maximum Weight (kg)</label>
 
-
-<input id="maxWeight"
+<input
 type="number"
-placeholder="Maximum Weight (kg)">
+id="maxWeight"
+placeholder="Maximum Weight">
 
+<label>Distance (km)</label>
 
-
-<input id="distance"
+<input
 type="number"
-placeholder="Distance (km)">
+id="distance"
+placeholder="1 - 1000 KM"
+min="1"
+max="1000">
 
+<label>Shipping Cost (₹)</label>
 
-
-<input id="price"
+<input
 type="number"
+id="price"
 placeholder="Shipping Cost">
-
-
 
 <button onclick="addRule()">
 
@@ -216,31 +190,7 @@ Add Shipping Rule
 
 </button>
 
-
-
-
-<div id="msg">
-
-✅ Rule Added Successfully
-
-</div>
-
-
-
-<hr>
-
-
-
-<input id="search"
-placeholder="Search Location"
-onkeyup="searchRule()">
-
-
-
-
-
 <table>
-
 
 <thead>
 
@@ -256,730 +206,152 @@ onkeyup="searchRule()">
 
 <th>Action</th>
 
-
 </tr>
-
 
 </thead>
 
-
-
-<tbody id="ruleTable">
+<tbody id="rules">
 
 </tbody>
 
-
 </table>
 
-
-
 </div>
-
-
-
-
-
-
-
-<!-- EDIT POPUP -->
-
-
-<div id="editPopup" class="popup">
-
-
-<div class="popup-box">
-
-
-<h3>Edit Shipping Rule</h3>
-
-
-<input id="editLocation">
-
-
-<input id="editMinWeight"
-type="number">
-
-
-<input id="editMaxWeight"
-type="number">
-
-
-<input id="editDistance"
-type="number">
-
-
-<input id="editPrice"
-type="number">
-
-
-<button onclick="saveEdit()">
-
-Save Changes
-
-</button>
-
-
-
-<button onclick="closeEdit()">
-
-Cancel
-
-</button>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- ERROR POPUP -->
-
-
-<div id="errorPopup" class="error-popup">
-
-
-<div class="error-box">
-
-
-<h3>Error</h3>
-
-
-<p id="errorText"></p>
-
-
-<button onclick="closeError()">
-
-OK
-
-</button>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
 
 <script>
-
-
-let shippingRules =
-JSON.parse(localStorage.getItem("shippingRules")) || [];
-
-
-let editIndex=-1;
-
-
-
-
-
-
-function validateData(location,minWeight,maxWeight,distance,price){
-
-
-
-if(location.length < 3){
-
-return "Location minimum 3 characters required";
-
-}
-
-
-
-if(location.length > 50){
-
-return "Location maximum 50 characters only";
-
-}
-
-
-
-
-let pattern=/^[A-Za-z ]+$/;
-
-
-if(!pattern.test(location)){
-
-return "Location should contain only characters";
-
-}
-
-
-
-
-
-if(Number(minWeight)>=Number(maxWeight)){
-
-
-return "Minimum weight must be less than Maximum weight";
-
-}
-
-
-
-
-
-if(Number(distance)<1 || Number(distance)>500){
-
-
-return "Distance must be between 1 and 500 km";
-
-}
-
-
-
-
-
-if(Number(price)<=0){
-
-
-return "Shipping cost must be greater than zero";
-
-}
-
-
-
-return "";
-
-}
-
-
-
-
-
-
-
-function addRule(){
-
-
-
-let location =
-document.getElementById("location").value.trim();
-
-
-
-let minWeight =
-document.getElementById("minWeight").value;
-
-
-
-let maxWeight =
-document.getElementById("maxWeight").value;
-
-
-
-let distance =
-document.getElementById("distance").value;
-
-
-
-let price =
-document.getElementById("price").value;
-
-
-
-
-
-
-if(!location || !minWeight || !maxWeight || !distance || !price){
-
-
-showError("Please fill all fields");
-
-return;
-
-}
-
-
-
-
-
-
-let error =
-validateData(
-location,
-minWeight,
-maxWeight,
-distance,
-price
-);
-
-
-
-
-if(error!=""){
-
-showError(error);
-
-return;
-
-}
-
-
-
-
-
-
-
-let duplicate =
-shippingRules.some(rule=>
-
-
-rule.location.toLowerCase()==location.toLowerCase()
-
-&&
-
-rule.minWeight==minWeight
-
-&&
-
-rule.maxWeight==maxWeight
-
-&&
-
-rule.distance==distance
-
-
-);
-
-
-
-
-
-if(duplicate){
-
-
-showError("Same Rule Already Exists");
-
-
-return;
-
-
-}
-
-
-
-
-
-
-
-shippingRules.push({
-
-location,
-minWeight,
-maxWeight,
-distance,
-price
-
-});
-
-
-
-
-
-saveData();
-
-
-clearInputs();
-
+    let rules = JSON.parse(localStorage.getItem("shippingRules")) || [];
 
 displayRules();
 
+function addRule() {
 
-showMessage();
+    let location = document.getElementById("location").value.trim();
+    let minWeight = document.getElementById("minWeight").value;
+    let maxWeight = document.getElementById("maxWeight").value;
+    let distance = document.getElementById("distance").value;
+    let price = document.getElementById("price").value;
 
+    // Empty Validation
+    if (
+        location === "" ||
+        minWeight === "" ||
+        maxWeight === "" ||
+        distance === "" ||
+        price === ""
+    ) {
+        alert("Please fill all fields.");
+        return;
+    }
 
+    // Maximum Weight Validation
+    if (Number(minWeight) >= Number(maxWeight)) {
+        alert("Maximum Weight must be greater than Minimum Weight.");
+        return;
+    }
 
-}
+    // Distance Validation
+    if (Number(distance) < 1 || Number(distance) > 1000) {
+        alert("Distance must be between 1 and 1000 KM.");
+        return;
+    }
 
+    // Save Rule
+    let rule = {
+        location,
+        minWeight,
+        maxWeight,
+        distance,
+        price
+    };
 
+    rules.push(rule);
 
+    localStorage.setItem(
+        "shippingRules",
+        JSON.stringify(rules)
+    );
 
+    displayRules();
 
+    // Success Message
+    let success = document.getElementById("success");
 
+    success.style.display = "block";
 
+    setTimeout(function () {
 
-function editRule(index){
+        success.style.display = "none";
 
+    }, 2000);
 
-
-let rule=shippingRules[index];
-
-
-editIndex=index;
-
-
-
-editLocation.value=rule.location;
-
-editMinWeight.value=rule.minWeight;
-
-editMaxWeight.value=rule.maxWeight;
-
-editDistance.value=rule.distance;
-
-editPrice.value=rule.price;
-
-
-
-editPopup.style.display="flex";
-
-
-
-}
-
-
-
-
-
-
-
-
-function saveEdit(){
-
-
-
-let location=editLocation.value.trim();
-
-let minWeight=editMinWeight.value;
-
-let maxWeight=editMaxWeight.value;
-
-let distance=editDistance.value;
-
-let price=editPrice.value;
-
-
-
-
-
-
-let error =
-validateData(
-location,
-minWeight,
-maxWeight,
-distance,
-price
-);
-
-
-
-if(error!=""){
-
-showError(error);
-
-return;
+    // AUTO CLEAR OFF
+    // Inputs clear aagathu.
 
 }
 
+function displayRules() {
 
+    let tbody = document.getElementById("rules");
 
+    tbody.innerHTML = "";
 
+    rules.forEach(function (rule, index) {
 
+        tbody.innerHTML += `
 
-shippingRules[editIndex]={
+        <tr>
 
-location,
-minWeight,
-maxWeight,
-distance,
-price
+        <td>${rule.location}</td>
 
-};
+        <td>${rule.minWeight} - ${rule.maxWeight} KG</td>
 
+        <td>${rule.distance} KM</td>
 
+        <td>₹${rule.price}</td>
 
+        <td>
 
+        <button
+        class="delete"
+        onclick="deleteRule(${index})">
 
-saveData();
+        Delete
 
+        </button>
 
-closeEdit();
+        </td>
 
+        </tr>
 
-displayRules();
+        `;
 
-
-}
-
-
-
-
-
-
-
-
-
-function deleteRule(index){
-
-
-if(confirm("Delete this rule?")){
-
-
-shippingRules.splice(index,1);
-
-
-saveData();
-
-
-displayRules();
-
+    });
 
 }
 
+function deleteRule(index) {
+
+    let confirmDelete = confirm(
+        "Are you sure you want to delete this rule?"
+    );
+
+    if (confirmDelete) {
+
+        rules.splice(index, 1);
+
+        localStorage.setItem(
+            "shippingRules",
+            JSON.stringify(rules)
+        );
+
+        displayRules();
+
+    }
 
 }
-
-
-
-
-
-
-
-
-
-function searchRule(){
-
-
-let value =
-document.getElementById("search")
-.value.toLowerCase();
-
-
-
-
-let result =
-shippingRules.filter(rule=>
-
-rule.location.toLowerCase()
-.includes(value)
-
-);
-
-
-
-displayTable(result);
-
-
-
-}
-
-
-
-
-
-
-
-
-function displayRules(){
-
-displayTable(shippingRules);
-
-}
-
-
-
-
-
-
-
-
-function displayTable(data){
-
-
-let output="";
-
-
-
-data.forEach((rule,index)=>{
-
-
-output+=`
-
-<tr>
-
-<td>${rule.location}</td>
-
-<td>${rule.minWeight}-${rule.maxWeight} kg</td>
-
-<td>${rule.distance} km</td>
-
-<td>₹${rule.price}</td>
-
-
-<td>
-
-
-<button class="edit"
-onclick="editRule(${index})">
-
-Edit
-
-</button>
-
-
-<button class="delete"
-onclick="deleteRule(${index})">
-
-Delete
-
-</button>
-
-
-</td>
-
-
-</tr>
-
-
-`;
-
-
-
-});
-
-
-
-
-
-document.getElementById("ruleTable")
-.innerHTML=output;
-
-
-
-
-document.getElementById("counter")
-.innerHTML=
-"Total Rules: "+shippingRules.length;
-
-
-
-}
-
-
-
-
-
-
-
-function clearInputs(){
-
-
-location.value="";
-
-minWeight.value="";
-
-maxWeight.value="";
-
-distance.value="";
-
-price.value="";
-
-
-}
-
-
-
-
-
-
-
-
-function saveData(){
-
-
-localStorage.setItem(
-
-"shippingRules",
-
-JSON.stringify(shippingRules)
-
-);
-
-
-}
-
-
-
-
-
-
-function showError(message){
-
-
-errorText.innerHTML=message;
-
-
-errorPopup.style.display="flex";
-
-
-}
-
-
-
-function closeError(){
-
-
-errorPopup.style.display="none";
-
-
-}
-
-
-
-
-
-function closeEdit(){
-
-
-editPopup.style.display="none";
-
-
-}
-
-
-
-
-
-
-function showMessage(){
-
-
-msg.style.display="block";
-
-
-setTimeout(()=>{
-
-msg.style.display="none";
-
-},2000);
-
-
-
-}
-
-
-
-
-
-displayRules();
-
 
 </script>
 
-
 </body>
 
-</html>
+</html>v
