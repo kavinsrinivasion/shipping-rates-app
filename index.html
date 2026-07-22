@@ -25,7 +25,7 @@ padding:40px;
 .container{
 max-width:900px;
 margin:auto;
-background:#fff;
+background:white;
 padding:30px;
 border-radius:10px;
 box-shadow:0 0 15px rgba(0,0,0,.15);
@@ -34,7 +34,6 @@ box-shadow:0 0 15px rgba(0,0,0,.15);
 h2{
 text-align:center;
 margin-bottom:25px;
-color:#222;
 }
 
 label{
@@ -49,165 +48,199 @@ padding:12px;
 margin-top:5px;
 border:1px solid #ccc;
 border-radius:6px;
-font-size:15px;
 }
 
 button{
-margin-top:20px;
-width:100%;
+
+margin-top:15px;
 padding:12px;
-background:#0d6efd;
-color:#fff;
 border:none;
 border-radius:6px;
-font-size:16px;
 cursor:pointer;
+color:white;
+background:#0d6efd;
+font-size:15px;
+
 }
 
 button:hover{
-background:#0b5ed7;
+opacity:.9;
+}
+
+.addBtn{
+width:100%;
 }
 
 table{
+
 width:100%;
 margin-top:25px;
 border-collapse:collapse;
+
 }
 
 th{
+
 background:#0d6efd;
 color:white;
 padding:12px;
+
 }
 
 td{
+
 padding:10px;
 border:1px solid #ddd;
 text-align:center;
+
 }
+
 
 .deleteBtn{
+
 background:#dc3545;
 padding:8px 15px;
-border:none;
-color:white;
-border-radius:5px;
-cursor:pointer;
+
 }
 
-.deleteBtn:hover{
-background:#bb2d3b;
-}
 
 /* Popup */
 
 .popup{
+
 display:none;
 position:fixed;
-left:0;
 top:0;
+left:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,.5);
 justify-content:center;
 align-items:center;
-z-index:999;
+
 }
 
+
 .popup-box{
+
 background:white;
-width:380px;
+width:350px;
 padding:25px;
 border-radius:10px;
 text-align:center;
-animation:popup .3s;
-}
-
-@keyframes popup{
-
-from{
-transform:scale(.7);
-opacity:0;
-}
-
-to{
-transform:scale(1);
-opacity:1;
-}
 
 }
+
 
 .popup-box h3{
+
 margin-bottom:15px;
-color:red;
+
 }
 
-.popup-box p{
-margin-bottom:20px;
-}
 
 .popup-box button{
-width:120px;
-margin:auto;
+
+width:100px;
+margin:10px;
+
 }
 
+
 .success h3{
+
 color:green;
+
+}
+
+
+.cancelBtn{
+
+background:#6c757d;
+
+}
+
+
+.confirmDeleteBtn{
+
+background:#dc3545;
+
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
-<h2>Custom Shipping Rates Manager</h2>
 
-<label>Customer Location</label>
+<h2>
+Custom Shipping Rates Manager
+</h2>
 
-<input
-id="location"
+
+<label>
+Customer Location
+</label>
+
+<input id="location"
 type="text"
 maxlength="30"
-placeholder="Enter Customer Location">
+placeholder="Enter Location">
 
-<label>Minimum Weight (kg)</label>
 
-<input
-id="minWeight"
+<label>
+Minimum Weight (kg)
+</label>
+
+<input id="minWeight"
 type="number"
 placeholder="Minimum Weight">
 
-<label>Maximum Weight (kg)</label>
 
-<input
-id="maxWeight"
+<label>
+Maximum Weight (kg)
+</label>
+
+<input id="maxWeight"
 type="number"
 placeholder="Maximum Weight">
 
-<label>Distance (km)</label>
 
-<input
-id="distance"
+<label>
+Distance (km)
+</label>
+
+<input id="distance"
 type="number"
 min="1"
 max="1000"
 placeholder="1 - 1000 KM">
 
-<label>Shipping Cost (₹)</label>
 
-<input
-id="price"
+<label>
+Shipping Cost (₹)
+</label>
+
+<input id="price"
 type="number"
 placeholder="Shipping Cost">
 
-<button onclick="addRule()">
+
+<button class="addBtn" onclick="addRule()">
+
 Add Shipping Rule
+
 </button>
 
+
+
 <table>
+
 
 <thead>
 
@@ -223,122 +256,192 @@ Add Shipping Rule
 
 </thead>
 
+
 <tbody id="rules">
+
 
 </tbody>
 
+
 </table>
 
+
 </div>
+
+
 
 <!-- Error Popup -->
 
-<div
-id="errorPopup"
-class="popup">
+<div id="errorPopup" class="popup">
 
 <div class="popup-box">
 
-<h3>Error</h3>
+<h3 style="color:red;">
+Error
+</h3>
 
 <p id="errorMessage"></p>
 
+
 <button onclick="closeError()">
-
 OK
-
 </button>
 
+
 </div>
 
 </div>
+
+
 
 <!-- Success Popup -->
 
-<div
-id="successPopup"
-class="popup">
+<div id="successPopup" class="popup">
 
 <div class="popup-box success">
 
-<h3>Success</h3>
 
-<p id="successMessage">
+<h3>
+Success
+</h3>
 
-Rule Added Successfully
 
-</p>
+<p id="successMessage"></p>
+
 
 <button onclick="closeSuccess()">
-
 OK
+</button>
+
+
+</div>
+
+</div>
+
+
+
+<!-- Delete Confirm Popup -->
+
+<div id="deletePopup" class="popup">
+
+<div class="popup-box">
+
+
+<h3 style="color:red;">
+Confirm Delete
+</h3>
+
+
+<p>
+Are you sure you want to delete this Shipping Rule?
+</p>
+
+
+<button class="confirmDeleteBtn"
+onclick="confirmDelete()">
+
+Delete
 
 </button>
 
-</div>
+
+<button class="cancelBtn"
+onclick="closeDelete()">
+
+Cancel
+
+</button>
+
 
 </div>
 
-<script>
-    // ==========================
+</div>
+
+
+<script>// ==========================
 // Custom Shipping Rates
 // ==========================
 
 let rules = JSON.parse(localStorage.getItem("shippingRules")) || [];
 
+let deleteIndex = null;
+
 displayRules();
 
-// ---------- Popup ----------
+
+// ---------- Error Popup ----------
 
 function showError(message){
 
 document.getElementById("errorMessage").innerHTML = message;
 
-document.getElementById("errorPopup").style.display = "flex";
+document.getElementById("errorPopup").style.display="flex";
 
 }
+
 
 function closeError(){
 
-document.getElementById("errorPopup").style.display = "none";
+document.getElementById("errorPopup").style.display="none";
 
 }
+
+
+
+// ---------- Success Popup ----------
 
 function showSuccess(message){
 
 document.getElementById("successMessage").innerHTML = message;
 
-document.getElementById("successPopup").style.display = "flex";
+document.getElementById("successPopup").style.display="flex";
+
+
+setTimeout(function(){
+
+closeSuccess();
+
+},2000);
+
 
 }
+
 
 function closeSuccess(){
 
-document.getElementById("successPopup").style.display = "none";
+document.getElementById("successPopup").style.display="none";
 
 }
+
+
 
 // ---------- Add Rule ----------
 
 function addRule(){
 
+
 let location =
 document.getElementById("location").value.trim();
+
 
 let minWeight =
 document.getElementById("minWeight").value;
 
+
 let maxWeight =
 document.getElementById("maxWeight").value;
 
+
 let distance =
 document.getElementById("distance").value;
+
 
 let price =
 document.getElementById("price").value;
 
 
-// Empty Validation
+
+// Empty Check
 
 if(
 location=="" ||
@@ -355,91 +458,143 @@ return;
 }
 
 
-// Maximum Weight Validation
+
+// Weight Check
 
 if(Number(minWeight)>=Number(maxWeight)){
 
-showError("Maximum Weight must be greater than Minimum Weight.");
+showError(
+"Maximum Weight must be greater than Minimum Weight."
+);
 
 return;
 
 }
 
 
-// Distance Validation
+
+// Distance Check
 
 if(
 Number(distance)<1 ||
 Number(distance)>1000
 ){
 
-showError("Distance must be between 1 and 1000 KM.");
+showError(
+"Distance must be between 1 and 1000 KM."
+);
 
 return;
 
 }
 
 
-// Shipping Cost Validation
+
+// Price Check
 
 if(Number(price)<=0){
 
-showError("Shipping Cost must be greater than 0.");
+showError(
+"Shipping Cost must be greater than 0."
+);
 
 return;
 
 }
 
 
-// Save Rule
+
+// Duplicate Check
+
+let duplicate = rules.some(rule =>
+
+rule.location.toLowerCase()==location.toLowerCase() &&
+
+rule.minWeight==minWeight &&
+
+rule.maxWeight==maxWeight &&
+
+rule.distance==distance &&
+
+rule.price==price
+
+);
+
+
+
+if(duplicate){
+
+showError(
+"This Shipping Rule already exists."
+);
+
+return;
+
+}
+
+
+
+// Create Rule
 
 let rule={
 
-location:location,
-
-minWeight:minWeight,
-
-maxWeight:maxWeight,
-
-distance:distance,
-
-price:price
+location,
+minWeight,
+maxWeight,
+distance,
+price
 
 };
 
+
+
 rules.push(rule);
+
+
 
 localStorage.setItem(
 "shippingRules",
 JSON.stringify(rules)
 );
 
+
+
 displayRules();
 
-showSuccess("Shipping Rule Added Successfully.");
 
-// Auto Clear OFF
-// Values appadiye irukkum
+showSuccess(
+"Shipping Rule Added Successfully."
+);
+
+
 
 }
 
 
-// ---------- Display ----------
+
+// ---------- Display Rules ----------
 
 function displayRules(){
+
 
 let tbody =
 document.getElementById("rules");
 
+
 tbody.innerHTML="";
+
+
 
 rules.forEach(function(rule,index){
 
-tbody.innerHTML+=`
+
+tbody.innerHTML += `
+
 
 <tr>
 
 <td>${rule.location}</td>
+
 
 <td>
 
@@ -449,11 +604,13 @@ ${rule.maxWeight} KG
 
 </td>
 
+
 <td>
 
 ${rule.distance} KM
 
 </td>
+
 
 <td>
 
@@ -461,11 +618,11 @@ ${rule.distance} KM
 
 </td>
 
+
 <td>
 
-<button
 
-class="deleteBtn"
+<button class="deleteBtn"
 
 onclick="deleteRule(${index})">
 
@@ -473,27 +630,52 @@ Delete
 
 </button>
 
+
 </td>
+
 
 </tr>
 
+
 `;
 
+
 });
+
 
 }
 
 
-// ---------- Delete ----------
+
+
+// ---------- Open Delete Popup ----------
+
 
 function deleteRule(index){
 
-let answer=
-confirm("Are you sure you want to delete this Shipping Rule?");
 
-if(answer){
+deleteIndex=index;
 
-rules.splice(index,1);
+
+document.getElementById("deletePopup").style.display="flex";
+
+
+}
+
+
+
+// ---------- Confirm Delete ----------
+
+
+function confirmDelete(){
+
+
+if(deleteIndex !== null){
+
+
+rules.splice(deleteIndex,1);
+
+
 
 localStorage.setItem(
 
@@ -503,16 +685,41 @@ JSON.stringify(rules)
 
 );
 
+
+
 displayRules();
 
-showSuccess("Shipping Rule Deleted Successfully.");
+
+
+showSuccess(
+"Shipping Rule Deleted Successfully."
+);
+
+
+
+closeDelete();
+
+
+
+deleteIndex=null;
+
 
 }
 
+
+
 }
 
-</script>
 
-</body>
 
-</html>
+// ---------- Cancel Delete ----------
+
+
+function closeDelete(){
+
+
+document.getElementById("deletePopup").style.display="none";
+
+
+}
+
